@@ -12,6 +12,37 @@ See [VERSIONING.md](VERSIONING.md) for the versioning policy.
 
 - Changes accumulating toward the next release.
 
+## [0.5.0] - 2026-06-30
+
+Milestone 5 — Enterprise Quality Engineering Platform (Automation). A modular,
+configuration-driven test framework with a pluggable adapter layer. Framework
+unit tests run on every build; SUT-dependent suites are tagged and excluded by
+default. No performance/security/accessibility/visual testing yet (Milestone 7).
+
+### Added
+
+- **Maven `automation` module** added to the reactor, with Rest Assured,
+  Playwright, Selenium, Cucumber, Datafaker, and Awaitility dependencies and a
+  surefire setup that excludes live-SUT suites by tag/class (re-included via `-Pe2e`).
+- **Configuration core:** `FrameworkConfig` (layered: system properties → env →
+  `framework.properties`) and `TargetSystem` registry of supported targets.
+- **Resource-adapter layer:** `ResourceAdapter`/`HttpResourceAdapter`/`AdapterFactory`
+  so tests target systems (Local omiiCARE, OpenMRS, OpenEMR, HAPI FHIR,
+  SMART Health IT, OpenFDA, DummyJSON, Restful Booker) through interfaces — adding
+  a target needs only a new adapter; switching environments is config-only.
+- **Test-data generators:** `PatientFactory` producing PHI-safe synthetic patients.
+- **Example suites:** Rest Assured API suite (auth, CRUD, JSON-schema validation),
+  Playwright UI suite (login via stable `data-testid` selectors), and a Cucumber
+  BDD feature + reusable step definitions + JUnit Platform runner.
+- **Framework unit tests:** config resolution/override, adapter resolution and URL
+  composition, and synthetic-data validity.
+
+### Verified
+
+- `mvn -pl automation test` — 5 framework unit tests green; e2e/UI/BDD suites
+  compile and are excluded by default. Full reactor (`backend` + `automation`)
+  builds and installs.
+
 ## [0.4.0] - 2026-06-30
 
 Milestone 4 — Enterprise Frontend Platform & Healthcare Portals. A
@@ -152,7 +183,8 @@ no application, API, or automation code by design.
   plus the cross-document consistency baseline.
 - **License:** MIT license with a healthcare-data notice.
 
-[Unreleased]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.1.0...v0.2.0

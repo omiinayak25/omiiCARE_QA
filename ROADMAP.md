@@ -78,7 +78,7 @@ i18n + theming; testing-readiness (stable selectors).
 **Gate:** App builds; auth integrates with backend; role nav + responsive
 layouts work; a11y met; component library exists; portals functional.
 
-### ⬜ Milestone 5 — Enterprise Quality Engineering Platform (Automation)
+### ✅ Milestone 5 — Enterprise Quality Engineering Platform (Automation)
 **Goal:** The enterprise testing ecosystem — modular, config-driven,
 environment-independent.
 **Deliverables:** Playwright, Selenium, Rest Assured, BDD; architectural patterns

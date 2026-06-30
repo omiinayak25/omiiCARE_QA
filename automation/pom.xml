@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  omiiCARE_QA automation platform (Milestone 5).
+  Modular, configuration-driven, environment-independent test framework:
+  shared core + resource-adapter layer + test-data generators, with Rest Assured
+  (API), Playwright (UI), and Cucumber (BDD) suites.
+
+  Build philosophy: framework unit tests run on every build. Suites that require
+  a running System Under Test are tagged ("api-e2e", "ui-e2e", "bdd") and are
+  EXCLUDED by default; activate them with -Pe2e once the SUT is up.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.omiicare.qa</groupId>
+        <artifactId>omiicare-qa-parent</artifactId>
+        <version>0.5.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>omiicare-qa-automation</artifactId>
+    <name>omiiCARE_QA :: Automation</name>
+    <description>Enterprise quality engineering platform (UI/API/BDD + adapters)</description>
+
+    <properties>
+        <restassured.version>5.5.0</restassured.version>
+        <playwright.version>1.47.0</playwright.version>
+        <selenium.version>4.25.0</selenium.version>
+        <cucumber.version>7.20.1</cucumber.version>
+        <junit.platform.version>1.11.2</junit.platform.version>
+        <datafaker.version>2.4.1</datafaker.version>
+        <assertj.version>3.26.3</assertj.version>
+        <awaitility.version>4.2.2</awaitility.version>
+        <!-- Suites needing a live SUT are excluded from the default build. -->
+        <excluded.test.tags>api-e2e,ui-e2e,bdd</excluded.test.tags>
+        <!-- The Cucumber suite is excluded by class name by default (an empty,
+             tag-filtered suite would otherwise error); -Pe2e re-includes it. -->
+        <excluded.test.classes>**/RunCucumberTest.java</excluded.test.classes>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${restassured.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>json-schema-validator</artifactId>
+            <version>${restassured.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.playwright</groupId>
+            <artifactId>playwright</artifactId>
+            <version>${playwright.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit-platform-engine</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite</artifactId>
+            <version>${junit.platform.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.datafaker</groupId>
+            <artifactId>datafaker</artifactId>
+            <version>${datafaker.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>${awaitility.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <!-- Default build runs framework unit tests; SUT-dependent
+                         suites are excluded by tag and (for BDD) by class name. -->
+                    <excludedGroups>${excluded.test.tags}</excludedGroups>
+                    <excludes>
+                        <exclude>${excluded.test.classes}</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <!-- Activate the full e2e suite against a running SUT: mvn -pl automation -Pe2e test -->
+        <profile>
+            <id>e2e</id>
+            <properties>
+                <excluded.test.tags></excluded.test.tags>
+                <excluded.test.classes>**/DoesNotExist.java</excluded.test.classes>
+            </properties>
+        </profile>
+    </profiles>
+</project>

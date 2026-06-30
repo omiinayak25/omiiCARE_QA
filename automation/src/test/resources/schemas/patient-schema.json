@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Patient",
+  "type": "object",
+  "required": ["id", "mrn", "firstName", "lastName", "dateOfBirth", "gender", "status"],
+  "properties": {
+    "id": { "type": "integer" },
+    "mrn": { "type": "string" },
+    "firstName": { "type": "string" },
+    "lastName": { "type": "string" },
+    "dateOfBirth": { "type": "string" },
+    "gender": { "type": "string" },
+    "email": { "type": ["string", "null"] },
+    "phone": { "type": ["string", "null"] },
+    "status": { "type": "string" }
+  }
+}
