@@ -1,0 +1,70 @@
+{
+  "app": {
+    "name": "omiiCARE_QA",
+    "tagline": "Enterprise Healthcare Quality Engineering Platform"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "patients": "Patients",
+    "appointments": "Appointments",
+    "logout": "Sign out",
+    "toggleTheme": "Toggle theme"
+  },
+  "login": {
+    "title": "Sign in",
+    "username": "Username",
+    "password": "Password",
+    "submit": "Sign in",
+    "error": "Invalid username or password",
+    "demoHint": "Demo: demo.admin / Admin@12345"
+  },
+  "dashboard": {
+    "welcome": "Welcome, {{name}}",
+    "tenant": "Tenant #{{tenant}}",
+    "patients": "Patients",
+    "appointments": "Appointments",
+    "roles": "Your access"
+  },
+  "patients": {
+    "title": "Patients",
+    "search": "Search by name or MRN",
+    "add": "Register patient",
+    "mrn": "MRN",
+    "name": "Name",
+    "dob": "Date of birth",
+    "gender": "Gender",
+    "status": "Status",
+    "empty": "No patients found",
+    "created": "Patient registered",
+    "form": {
+      "firstName": "First name",
+      "lastName": "Last name",
+      "dateOfBirth": "Date of birth",
+      "gender": "Gender",
+      "email": "Email",
+      "phone": "Phone",
+      "save": "Save",
+      "cancel": "Cancel"
+    }
+  },
+  "appointments": {
+    "title": "Appointments",
+    "book": "Book appointment",
+    "patient": "Patient",
+    "provider": "Provider",
+    "start": "Start",
+    "end": "End",
+    "reason": "Reason",
+    "status": "Status",
+    "empty": "No appointments yet",
+    "booked": "Appointment booked",
+    "conflict": "That time conflicts with an existing appointment"
+  },
+  "common": {
+    "loading": "Loading…",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "unauthorized": "You do not have access to this page",
+    "notFound": "Page not found"
+  }
+}

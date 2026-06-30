@@ -12,6 +12,34 @@ See [VERSIONING.md](VERSIONING.md) for the versioning policy.
 
 - Changes accumulating toward the next release.
 
+## [0.4.0] - 2026-06-30
+
+Milestone 4 — Enterprise Frontend Platform & Healthcare Portals. A
+production-quality React/TypeScript/Vite web application — the primary System
+Under Test — wired to the backend. No test tooling (that is Milestone 5).
+
+### Added
+
+- **App shell:** Vite + React 18 + TypeScript (strict) + Material UI v6 with a
+  light/dark enterprise theme persisted via a ColorMode context, a top-level
+  ErrorBoundary, and i18n (i18next) with no hardcoded strings.
+- **Authentication:** `AuthContext` (login/logout, current user, permission
+  checks) over an Axios client that attaches the bearer token and transparently
+  refreshes it once on a 401.
+- **Routing & guards:** `AppRouter` with `ProtectedRoute` enforcing authentication
+  and per-route permissions (redirecting to `/login` or `/unauthorized`).
+- **Portals/pages:** Login, Dashboard (role-aware), Patients (paginated list +
+  search + register dialog), Appointments (list + booking dialog surfacing the
+  backend's double-booking rule), plus 404/403 screens.
+- **Testability:** stable `data-testid` selectors throughout, permission-aware
+  navigation, and consistent DOM so the Milestone 5 framework needs no app changes.
+- **Tooling:** ESLint flat config (type-aware), `npm run build`/`lint`/`typecheck`,
+  Vite dev proxy to the backend, and `.env.example`.
+
+### Verified
+
+- `npm run build` (tsc strict + vite) and `npm run lint` both pass cleanly.
+
 ## [0.3.0] - 2026-06-30
 
 Milestone 3 — Enterprise Healthcare Platform Core (Backend). A working,
@@ -124,7 +152,8 @@ no application, API, or automation code by design.
   plus the cross-document consistency baseline.
 - **License:** MIT license with a healthcare-data notice.
 
-[Unreleased]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/omiinayak25/omiiCARE_QA/releases/tag/v0.1.0

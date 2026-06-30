@@ -67,7 +67,7 @@ foundation.
 **Gate:** Backend starts; auth works; OpenAPI loads; Flyway + seeds load;
 frameworks work; unit tests pass.
 
-### ⬜ Milestone 4 — Enterprise Frontend Platform & Healthcare Portals
+### ✅ Milestone 4 — Enterprise Frontend Platform & Healthcare Portals
 **Goal:** Production-quality React web app — the primary SUT.
 **Deliverables:** modular architecture; authentication UI; role-based portals
 (Patient, Doctor, Nurse, Reception, Lab, Radiology, Pharmacy, Billing, Insurance,
