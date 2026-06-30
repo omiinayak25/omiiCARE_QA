@@ -1,10 +1,9 @@
 package com.omiicare.qa.automation.core.config;
 
 /**
- * The external systems the automation platform can target through the adapter
- * layer. Tests reference a {@code TargetSystem}, never a raw URL; the adapter
- * factory resolves the concrete endpoint from configuration, so switching
- * environments is a configuration change only.
+ * The external systems the automation platform can target through the adapter layer. Tests
+ * reference a {@code TargetSystem}, never a raw URL; the adapter factory resolves the concrete
+ * endpoint from configuration, so switching environments is a configuration change only.
  */
 public enum TargetSystem {
     LOCAL_OMIICARE("http://localhost:8080/api/v1"),

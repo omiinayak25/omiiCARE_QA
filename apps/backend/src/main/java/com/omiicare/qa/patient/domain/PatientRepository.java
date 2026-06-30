@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * Persistence access for {@link PatientEntity}. Every query is tenant-scoped so a
- * caller can only ever read or write patients belonging to their own tenant.
+ * Persistence access for {@link PatientEntity}. Every query is tenant-scoped so a caller can only
+ * ever read or write patients belonging to their own tenant.
  */
 public interface PatientRepository extends JpaRepository<PatientEntity, Long> {
 

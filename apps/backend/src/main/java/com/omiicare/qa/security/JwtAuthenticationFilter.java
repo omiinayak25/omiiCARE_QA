@@ -19,10 +19,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
- * Authenticates requests carrying a valid {@code access} JWT in the
- * {@code Authorization: Bearer} header. On success it populates the Spring
- * Security context and the {@link TenantContext}; refresh tokens are rejected
- * here (they are only accepted by the refresh endpoint).
+ * Authenticates requests carrying a valid {@code access} JWT in the {@code Authorization: Bearer}
+ * header. On success it populates the Spring Security context and the {@link TenantContext};
+ * refresh tokens are rejected here (they are only accepted by the refresh endpoint).
  */
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {

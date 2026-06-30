@@ -19,10 +19,9 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
- * Stateless, JWT-based security. All endpoints require authentication except the
- * auth endpoints, health/info, OpenAPI, and the dev H2 console. Method-level
- * authorization ({@code @PreAuthorize}) gates individual operations by permission
- * so there are no hardcoded role checks in business code.
+ * Stateless, JWT-based security. All endpoints require authentication except the auth endpoints,
+ * health/info, OpenAPI, and the dev H2 console. Method-level authorization ({@code @PreAuthorize})
+ * gates individual operations by permission so there are no hardcoded role checks in business code.
  */
 @Configuration
 @EnableMethodSecurity

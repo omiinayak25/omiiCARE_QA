@@ -3,9 +3,8 @@ package com.omiicare.qa.security.jwt;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * Typed binding for {@code omiicare.security.jwt.*}. Externalizes the signing
- * secret and token lifetimes so nothing is hardcoded and secrets stay in the
- * environment.
+ * Typed binding for {@code omiicare.security.jwt.*}. Externalizes the signing secret and token
+ * lifetimes so nothing is hardcoded and secrets stay in the environment.
  */
 @ConfigurationProperties(prefix = "omiicare.security.jwt")
 public class JwtProperties {

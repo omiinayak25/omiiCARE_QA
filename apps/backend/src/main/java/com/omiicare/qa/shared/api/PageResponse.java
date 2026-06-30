@@ -4,8 +4,8 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 /**
- * Serialization-friendly pagination envelope. Decouples the API contract from
- * Spring Data's {@link Page} implementation so the wire format is stable.
+ * Serialization-friendly pagination envelope. Decouples the API contract from Spring Data's {@link
+ * Page} implementation so the wire format is stable.
  *
  * @param <T> the element type
  */

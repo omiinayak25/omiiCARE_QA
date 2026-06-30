@@ -6,8 +6,8 @@ import com.omiicare.qa.security.auth.AuthDtos.CurrentUser;
 import com.omiicare.qa.security.auth.AuthDtos.LoginRequest;
 import com.omiicare.qa.security.auth.AuthDtos.TokenResponse;
 import com.omiicare.qa.security.jwt.JwtService;
-import com.omiicare.qa.shared.error.ErrorCode;
 import com.omiicare.qa.shared.error.ApiException;
+import com.omiicare.qa.shared.error.ErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import java.util.List;
@@ -19,8 +19,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 /**
- * Authentication use cases: password login (issuing an access + refresh token
- * pair) and refresh-token rotation. Each significant outcome is audited.
+ * Authentication use cases: password login (issuing an access + refresh token pair) and
+ * refresh-token rotation. Each significant outcome is audited.
  */
 @Service
 public class AuthService {
@@ -46,16 +46,19 @@ public class AuthService {
                                     request.username(), request.password()));
             AppUserPrincipal principal = (AppUserPrincipal) authentication.getPrincipal();
             List<String> authorities = authorityNames(principal);
-            auditService.record("LOGIN_SUCCESS", "User", principal.getUsername(), principal.getTenantId());
+            auditService.record(
+                    "LOGIN_SUCCESS", "User", principal.getUsername(), principal.getTenantId());
             return new TokenResponse(
                     jwtService.generateAccessToken(
                             principal.getUsername(), principal.getTenantId(), authorities),
-                    jwtService.generateRefreshToken(principal.getUsername(), principal.getTenantId()),
+                    jwtService.generateRefreshToken(
+                            principal.getUsername(), principal.getTenantId()),
                     "Bearer",
                     jwtService.accessTokenSeconds());
         } catch (BadCredentialsException ex) {
             auditService.record("LOGIN_FAILURE", "User", request.username(), null);
-            throw new ApiExceptionAdapter(ErrorCode.INVALID_CREDENTIALS, "Invalid username or password");
+            throw new ApiExceptionAdapter(
+                    ErrorCode.INVALID_CREDENTIALS, "Invalid username or password");
         }
     }
 

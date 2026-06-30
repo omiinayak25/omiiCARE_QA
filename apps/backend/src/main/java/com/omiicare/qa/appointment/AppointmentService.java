@@ -1,8 +1,8 @@
 package com.omiicare.qa.appointment;
 
+import com.omiicare.qa.appointment.api.AppointmentMapper;
 import com.omiicare.qa.appointment.api.AppointmentResponse;
 import com.omiicare.qa.appointment.api.BookAppointmentRequest;
-import com.omiicare.qa.appointment.api.AppointmentMapper;
 import com.omiicare.qa.appointment.domain.AppointmentEntity;
 import com.omiicare.qa.appointment.domain.AppointmentRepository;
 import com.omiicare.qa.audit.AuditService;
@@ -17,11 +17,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Appointment scheduling use cases. Enforces the documented business rules:
- * an appointment must reference an existing patient and provider in the caller's
- * tenant (BR-APPT-003), must end after it starts (BR-APPT-002), and must not
- * overlap another active appointment for the same provider (BR-APPT-001,
- * no double-booking).
+ * Appointment scheduling use cases. Enforces the documented business rules: an appointment must
+ * reference an existing patient and provider in the caller's tenant (BR-APPT-003), must end after
+ * it starts (BR-APPT-002), and must not overlap another active appointment for the same provider
+ * (BR-APPT-001, no double-booking).
  */
 @Service
 public class AppointmentService {
@@ -47,7 +46,9 @@ public class AppointmentService {
 
     @Transactional(readOnly = true)
     public Page<AppointmentResponse> list(Pageable pageable) {
-        return appointmentRepository.findAllByTenantId(tenantId(), pageable).map(mapper::toResponse);
+        return appointmentRepository
+                .findAllByTenantId(tenantId(), pageable)
+                .map(mapper::toResponse);
     }
 
     @Transactional(readOnly = true)

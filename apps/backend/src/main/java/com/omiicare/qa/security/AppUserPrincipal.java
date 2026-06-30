@@ -10,10 +10,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * Spring Security adapter over {@link UserEntity}. Exposes roles as
- * {@code ROLE_<code>} authorities and permissions as their raw codes (e.g.
- * {@code patient:read}), enabling both role- and permission-based authorization.
- * Carries the tenant id so the authentication filter can seed the tenant context.
+ * Spring Security adapter over {@link UserEntity}. Exposes roles as {@code ROLE_<code>} authorities
+ * and permissions as their raw codes (e.g. {@code patient:read}), enabling both role- and
+ * permission-based authorization. Carries the tenant id so the authentication filter can seed the
+ * tenant context.
  */
 public class AppUserPrincipal implements UserDetails {
 
@@ -37,8 +37,7 @@ public class AppUserPrincipal implements UserDetails {
         List<GrantedAuthority> result = new ArrayList<>();
         for (RoleEntity role : user.getRoles()) {
             result.add(new SimpleGrantedAuthority("ROLE_" + role.getCode()));
-            role.getPermissions()
-                    .forEach(p -> result.add(new SimpleGrantedAuthority(p.getCode())));
+            role.getPermissions().forEach(p -> result.add(new SimpleGrantedAuthority(p.getCode())));
         }
         return result;
     }

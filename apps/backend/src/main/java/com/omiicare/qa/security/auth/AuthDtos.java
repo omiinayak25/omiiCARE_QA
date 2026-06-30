@@ -12,11 +12,11 @@ public final class AuthDtos {
             @NotBlank(message = "username is required") String username,
             @NotBlank(message = "password is required") String password) {}
 
-    public record RefreshRequest(@NotBlank(message = "refreshToken is required") String refreshToken) {}
+    public record RefreshRequest(
+            @NotBlank(message = "refreshToken is required") String refreshToken) {}
 
     public record TokenResponse(
             String accessToken, String refreshToken, String tokenType, long expiresInSeconds) {}
 
-    public record CurrentUser(
-            String username, Long tenantId, List<String> authorities) {}
+    public record CurrentUser(String username, Long tenantId, List<String> authorities) {}
 }

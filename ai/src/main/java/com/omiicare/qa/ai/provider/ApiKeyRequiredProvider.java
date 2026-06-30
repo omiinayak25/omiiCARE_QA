@@ -3,11 +3,10 @@ package com.omiicare.qa.ai.provider;
 import com.omiicare.qa.ai.config.AiConfig;
 
 /**
- * Represents a hosted provider (Claude or OpenAI). This module bundles no vendor
- * SDK and makes no network calls; constructing the provider is always safe, but
- * {@link #complete} fails fast with a clear message unless an API key is
- * configured. A real integration plugs the vendor SDK in here without changing any
- * caller — the abstraction stays vendor-neutral.
+ * Represents a hosted provider (Claude or OpenAI). This module bundles no vendor SDK and makes no
+ * network calls; constructing the provider is always safe, but {@link #complete} fails fast with a
+ * clear message unless an API key is configured. A real integration plugs the vendor SDK in here
+ * without changing any caller — the abstraction stays vendor-neutral.
  */
 public class ApiKeyRequiredProvider implements AiProvider {
 

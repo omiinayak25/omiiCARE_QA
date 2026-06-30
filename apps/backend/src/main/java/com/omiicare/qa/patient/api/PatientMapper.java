@@ -1,6 +1,5 @@
 package com.omiicare.qa.patient.api;
 
-import com.omiicare.qa.patient.api.PatientResponse;
 import com.omiicare.qa.patient.domain.PatientEntity;
 import org.mapstruct.Mapper;
 

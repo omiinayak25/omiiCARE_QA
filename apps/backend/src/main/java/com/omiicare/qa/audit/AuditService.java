@@ -8,11 +8,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Records significant actions (login, logout, create/update/delete of clinical
- * and billing data, role changes) to the audit log. Each record captures the
- * actor, action, target, tenant, and the correlation/request IDs from the MDC.
- * Audit writes run in their own transaction so an audit failure never rolls back
- * the business operation and vice versa.
+ * Records significant actions (login, logout, create/update/delete of clinical and billing data,
+ * role changes) to the audit log. Each record captures the actor, action, target, tenant, and the
+ * correlation/request IDs from the MDC. Audit writes run in their own transaction so an audit
+ * failure never rolls back the business operation and vice versa.
  */
 @Service
 public class AuditService {

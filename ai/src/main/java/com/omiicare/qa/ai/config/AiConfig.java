@@ -1,10 +1,10 @@
 package com.omiicare.qa.ai.config;
 
 /**
- * Configuration for the AI platform, resolved (highest precedence first) from JVM
- * system properties then environment variables, with safe defaults. AI is
- * <strong>disabled by default</strong> — it must be explicitly turned on, and a
- * provider call additionally requires an API key. AI assists; humans decide.
+ * Configuration for the AI platform, resolved (highest precedence first) from JVM system properties
+ * then environment variables, with safe defaults. AI is <strong>disabled by default</strong> — it
+ * must be explicitly turned on, and a provider call additionally requires an API key. AI assists;
+ * humans decide.
  */
 public final class AiConfig {
 
@@ -21,7 +21,8 @@ public final class AiConfig {
     }
 
     public static AiConfig load() {
-        boolean enabled = Boolean.parseBoolean(resolve("omii.ai.enabled", "OMII_AI_ENABLED", "false"));
+        boolean enabled =
+                Boolean.parseBoolean(resolve("omii.ai.enabled", "OMII_AI_ENABLED", "false"));
         String provider = resolve("omii.ai.provider", "OMII_AI_PROVIDER", "local");
         String model = resolve("omii.ai.model", "OMII_AI_MODEL", "claude-opus-4-8");
         String apiKey = resolve("omii.ai.apiKey", "OMII_AI_API_KEY", "");

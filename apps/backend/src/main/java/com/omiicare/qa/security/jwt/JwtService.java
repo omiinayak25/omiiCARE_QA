@@ -12,9 +12,9 @@ import javax.crypto.SecretKey;
 import org.springframework.stereotype.Service;
 
 /**
- * Issues and validates signed JWTs. Two token kinds are produced: short-lived
- * {@code access} tokens (carrying tenant and authority claims) and longer-lived
- * {@code refresh} tokens used only to mint new access tokens (token rotation).
+ * Issues and validates signed JWTs. Two token kinds are produced: short-lived {@code access} tokens
+ * (carrying tenant and authority claims) and longer-lived {@code refresh} tokens used only to mint
+ * new access tokens (token rotation).
  */
 @Service
 public class JwtService {
@@ -33,8 +33,7 @@ public class JwtService {
         this.key = Keys.hmacShaKeyFor(properties.getSecret().getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateAccessToken(
-            String username, Long tenantId, List<String> authorities) {
+    public String generateAccessToken(String username, Long tenantId, List<String> authorities) {
         Instant now = Instant.now();
         return Jwts.builder()
                 .issuer(properties.getIssuer())
@@ -43,7 +42,8 @@ public class JwtService {
                 .claim(CLAIM_TENANT, tenantId)
                 .claim(CLAIM_AUTHORITIES, authorities)
                 .issuedAt(Date.from(now))
-                .expiration(Date.from(now.plus(properties.getAccessTokenMinutes(), ChronoUnit.MINUTES)))
+                .expiration(
+                        Date.from(now.plus(properties.getAccessTokenMinutes(), ChronoUnit.MINUTES)))
                 .signWith(key)
                 .compact();
     }

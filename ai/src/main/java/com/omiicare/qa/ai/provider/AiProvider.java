@@ -1,10 +1,9 @@
 package com.omiicare.qa.ai.provider;
 
 /**
- * Provider abstraction. Concrete providers (Claude, OpenAI, local, future) are
- * selected by configuration and never coupled into business logic. Implementations
- * must be safe to construct offline; only {@link #complete} may require network
- * access and credentials.
+ * Provider abstraction. Concrete providers (Claude, OpenAI, local, future) are selected by
+ * configuration and never coupled into business logic. Implementations must be safe to construct
+ * offline; only {@link #complete} may require network access and credentials.
  */
 public interface AiProvider {
 

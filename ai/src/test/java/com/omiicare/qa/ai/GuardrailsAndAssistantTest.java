@@ -25,7 +25,8 @@ class GuardrailsAndAssistantTest {
     void disabledAssistantReturnsNoticeWithoutProviderCall() {
         FailureAnalysisAssistant assistant =
                 new FailureAnalysisAssistant(AiConfig.of(false, "local", "m", ""));
-        AiResponse response = assistant.analyze("LoginUiE2ETest", "TimeoutError waiting for selector");
+        AiResponse response =
+                assistant.analyze("LoginUiE2ETest", "TimeoutError waiting for selector");
         assertThat(response.aiAssisted()).isFalse();
         assertThat(response.text()).contains("disabled");
     }
@@ -45,7 +46,10 @@ class GuardrailsAndAssistantTest {
         FailureAnalysisAssistant assistant =
                 new FailureAnalysisAssistant(AiConfig.of(true, "local", "m", ""));
         assertThatThrownBy(
-                        () -> assistant.analyze("T", "Authorization: Bearer abcdefghijklmnopqrstuvwxyz123456"))
+                        () ->
+                                assistant.analyze(
+                                        "T",
+                                        "Authorization: Bearer abcdefghijklmnopqrstuvwxyz123456"))
                 .isInstanceOf(GuardrailViolationException.class);
     }
 }

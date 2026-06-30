@@ -4,19 +4,20 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * Security guardrails for AI input. AI must never receive or transmit secrets or
- * PHI. {@link #assertSafe} rejects prompts that contain credential-like material;
- * {@link #redact} masks them defensively. Healthcare data passed to AI must be
- * synthetic and PHI-safe — this is the last line of defense, not a substitute for
- * not sending sensitive data in the first place.
+ * Security guardrails for AI input. AI must never receive or transmit secrets or PHI. {@link
+ * #assertSafe} rejects prompts that contain credential-like material; {@link #redact} masks them
+ * defensively. Healthcare data passed to AI must be synthetic and PHI-safe — this is the last line
+ * of defense, not a substitute for not sending sensitive data in the first place.
  */
 public final class PromptGuardrails {
 
     private static final List<Pattern> SECRET_PATTERNS =
             List.of(
-                    Pattern.compile("(?i)(api[_-]?key|secret|password|passwd|token)\\s*[:=]\\s*\\S+"),
+                    Pattern.compile(
+                            "(?i)(api[_-]?key|secret|password|passwd|token)\\s*[:=]\\s*\\S+"),
                     Pattern.compile("-----BEGIN [A-Z ]*PRIVATE KEY-----"),
-                    Pattern.compile("eyJ[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}"),
+                    Pattern.compile(
+                            "eyJ[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}"),
                     Pattern.compile("(?i)bearer\\s+[A-Za-z0-9._-]{20,}"),
                     Pattern.compile("AKIA[0-9A-Z]{16}"));
 

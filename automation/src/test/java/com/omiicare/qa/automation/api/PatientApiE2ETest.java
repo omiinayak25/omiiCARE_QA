@@ -18,10 +18,10 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 /**
- * API end-to-end suite (Rest Assured) against the local omiiCARE SUT. Tagged
- * {@code api-e2e}: excluded from the default build and run with {@code -Pe2e}
- * once the backend is up. Demonstrates auth, request building, status/body
- * assertions, and JSON-schema validation through the adapter layer.
+ * API end-to-end suite (Rest Assured) against the local omiiCARE SUT. Tagged {@code api-e2e}:
+ * excluded from the default build and run with {@code -Pe2e} once the backend is up. Demonstrates
+ * auth, request building, status/body assertions, and JSON-schema validation through the adapter
+ * layer.
  */
 @Tag("api-e2e")
 class PatientApiE2ETest {
@@ -64,7 +64,8 @@ class PatientApiE2ETest {
                 .body("data.mrn", notNullValue())
                 .body(
                         "data",
-                        JsonSchemaValidator.matchesJsonSchemaInClasspath("schemas/patient-schema.json"));
+                        JsonSchemaValidator.matchesJsonSchemaInClasspath(
+                                "schemas/patient-schema.json"));
     }
 
     @Test

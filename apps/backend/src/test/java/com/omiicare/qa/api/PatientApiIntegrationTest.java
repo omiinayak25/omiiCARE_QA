@@ -18,9 +18,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 /**
- * End-to-end API test exercising the M3 vertical: JWT login, permission-guarded
- * patient CRUD, and the FHIR read facade. Runs against H2 under the {@code test}
- * profile with the synthetic DEMO data seeded by Flyway + {@code DataInitializer}.
+ * End-to-end API test exercising the M3 vertical: JWT login, permission-guarded patient CRUD, and
+ * the FHIR read facade. Runs against H2 under the {@code test} profile with the synthetic DEMO data
+ * seeded by Flyway + {@code DataInitializer}.
  */
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -60,8 +60,8 @@ class PatientApiIntegrationTest {
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(
                                                 "{\"firstName\":\"Grace\",\"lastName\":\"Hopper\","
-                                                    + "\"dateOfBirth\":\"1906-12-09\",\"gender\":\"FEMALE\","
-                                                    + "\"email\":\"grace@demo.example\"}"))
+                                                        + "\"dateOfBirth\":\"1906-12-09\",\"gender\":\"FEMALE\","
+                                                        + "\"email\":\"grace@demo.example\"}"))
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("$.data.mrn").exists())
                         .andReturn();
@@ -72,8 +72,7 @@ class PatientApiIntegrationTest {
                         .path("id")
                         .asLong();
 
-        mockMvc.perform(
-                        get("/api/v1/patients/" + id).header("Authorization", "Bearer " + token))
+        mockMvc.perform(get("/api/v1/patients/" + id).header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.lastName").value("Hopper"));
 

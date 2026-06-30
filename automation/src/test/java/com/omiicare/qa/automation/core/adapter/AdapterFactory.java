@@ -7,14 +7,14 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 /**
- * Resolves a {@link ResourceAdapter} for a {@link TargetSystem} (Factory pattern).
- * Most systems use the generic {@link HttpResourceAdapter}; register a custom
- * supplier here when a target needs special handling — existing tests are
- * unaffected.
+ * Resolves a {@link ResourceAdapter} for a {@link TargetSystem} (Factory pattern). Most systems use
+ * the generic {@link HttpResourceAdapter}; register a custom supplier here when a target needs
+ * special handling — existing tests are unaffected.
  */
 public final class AdapterFactory {
 
-    private static final Map<TargetSystem, BiFunction<TargetSystem, FrameworkConfig, ResourceAdapter>>
+    private static final Map<
+                    TargetSystem, BiFunction<TargetSystem, FrameworkConfig, ResourceAdapter>>
             REGISTRY = new EnumMap<>(TargetSystem.class);
 
     private AdapterFactory() {}

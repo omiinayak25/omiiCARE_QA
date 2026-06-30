@@ -48,7 +48,10 @@ class AppointmentApiIntegrationTest {
                         .andExpect(status().isOk())
                         .andReturn();
         JsonNode content =
-                objectMapper.readTree(r.getResponse().getContentAsString()).path("data").path("content");
+                objectMapper
+                        .readTree(r.getResponse().getContentAsString())
+                        .path("data")
+                        .path("content");
         return content.get(0).path("id").asLong();
     }
 
@@ -60,7 +63,7 @@ class AppointmentApiIntegrationTest {
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(
                                                 "{\"firstName\":\"Ada\",\"lastName\":\"Lovelace\","
-                                                    + "\"dateOfBirth\":\"1815-12-10\",\"gender\":\"FEMALE\"}"))
+                                                        + "\"dateOfBirth\":\"1815-12-10\",\"gender\":\"FEMALE\"}"))
                         .andExpect(status().isCreated())
                         .andReturn();
         return objectMapper

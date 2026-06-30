@@ -4,7 +4,6 @@ import com.omiicare.qa.security.domain.PermissionEntity;
 import com.omiicare.qa.security.domain.PermissionRepository;
 import com.omiicare.qa.security.domain.RoleEntity;
 import com.omiicare.qa.security.domain.RoleRepository;
-import com.omiicare.qa.security.domain.UserEntity;
 import com.omiicare.qa.security.domain.UserRepository;
 import java.util.HashSet;
 import java.util.List;
@@ -17,10 +16,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Non-production bootstrap that makes the synthetic DEMO data usable: it grants
- * every permission to {@code SUPER_ADMIN}, assigns that role to {@code demo.admin},
- * and sets a known development password if one has not been set yet. Idempotent
- * and never active in {@code stage}/{@code prod}.
+ * Non-production bootstrap that makes the synthetic DEMO data usable: it grants every permission to
+ * {@code SUPER_ADMIN}, assigns that role to {@code demo.admin}, and sets a known development
+ * password if one has not been set yet. Idempotent and never active in {@code stage}/{@code prod}.
  */
 @Component
 @Profile({"dev", "local", "docker", "test", "qa"})

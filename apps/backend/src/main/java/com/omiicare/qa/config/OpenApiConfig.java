@@ -1,12 +1,12 @@
 package com.omiicare.qa.config;
 
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-import io.swagger.v3.oas.models.Components;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -26,10 +26,15 @@ public class OpenApiConfig {
                                         "REST and FHIR APIs for the omiiCARE_QA healthcare platform. "
                                                 + "All data is synthetic and PHI-safe; no formal certification is claimed.")
                                 .version("1.0.0")
-                                .contact(new Contact().name("omiiCARE_QA").url(
-                                        "https://github.com/omiinayak25/omiiCARE_QA"))
-                                .license(new License().name("MIT").url(
-                                        "https://github.com/omiinayak25/omiiCARE_QA/blob/main/LICENSE")))
+                                .contact(
+                                        new Contact()
+                                                .name("omiiCARE_QA")
+                                                .url("https://github.com/omiinayak25/omiiCARE_QA"))
+                                .license(
+                                        new License()
+                                                .name("MIT")
+                                                .url(
+                                                        "https://github.com/omiinayak25/omiiCARE_QA/blob/main/LICENSE")))
                 .components(
                         new Components()
                                 .addSecuritySchemes(

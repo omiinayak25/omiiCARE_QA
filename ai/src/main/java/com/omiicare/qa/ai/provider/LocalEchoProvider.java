@@ -1,9 +1,9 @@
 package com.omiicare.qa.ai.provider;
 
 /**
- * A deterministic, network-free provider used for offline development, tests, and
- * demos. It does not call any external service; it returns a structured echo that
- * makes the prompt wiring observable without consuming tokens or credentials.
+ * A deterministic, network-free provider used for offline development, tests, and demos. It does
+ * not call any external service; it returns a structured echo that makes the prompt wiring
+ * observable without consuming tokens or credentials.
  */
 public class LocalEchoProvider implements AiProvider {
 

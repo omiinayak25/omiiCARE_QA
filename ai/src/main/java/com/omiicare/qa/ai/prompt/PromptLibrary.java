@@ -5,9 +5,9 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Loads versioned prompt templates from the classpath ({@code /prompts/<name>.txt}).
- * The human-facing prompt library lives under {@code ai/prompts/} as Markdown; the
- * engine ships machine-loadable copies as resources so prompts are reproducible.
+ * Loads versioned prompt templates from the classpath ({@code /prompts/<name>.txt}). The
+ * human-facing prompt library lives under {@code ai/prompts/} as Markdown; the engine ships
+ * machine-loadable copies as resources so prompts are reproducible.
  */
 public final class PromptLibrary {
 

@@ -2,9 +2,9 @@ package com.omiicare.qa.patient;
 
 import com.omiicare.qa.audit.AuditService;
 import com.omiicare.qa.patient.api.CreatePatientRequest;
+import com.omiicare.qa.patient.api.PatientMapper;
 import com.omiicare.qa.patient.api.PatientResponse;
 import com.omiicare.qa.patient.api.UpdatePatientRequest;
-import com.omiicare.qa.patient.api.PatientMapper;
 import com.omiicare.qa.patient.domain.PatientEntity;
 import com.omiicare.qa.patient.domain.PatientRepository;
 import com.omiicare.qa.shared.error.ConflictException;
@@ -17,9 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 /**
- * Patient use cases. Every operation is tenant-scoped via {@link TenantContext}
- * and mutations are audited. MRN uniqueness is enforced per tenant; an MRN is
- * auto-generated when the caller omits it.
+ * Patient use cases. Every operation is tenant-scoped via {@link TenantContext} and mutations are
+ * audited. MRN uniqueness is enforced per tenant; an MRN is auto-generated when the caller omits
+ * it.
  */
 @Service
 public class PatientService {
@@ -49,8 +49,7 @@ public class PatientService {
     @Transactional
     public PatientResponse create(CreatePatientRequest request) {
         Long tenantId = tenantId();
-        String mrn =
-                StringUtils.hasText(request.mrn()) ? request.mrn() : generateMrn(tenantId);
+        String mrn = StringUtils.hasText(request.mrn()) ? request.mrn() : generateMrn(tenantId);
         if (repository.existsByTenantIdAndMrn(tenantId, mrn)) {
             throw new ConflictException("A patient with MRN " + mrn + " already exists");
         }

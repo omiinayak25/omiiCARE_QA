@@ -1,5 +1,6 @@
 package com.omiicare.qa.security.domain;
 
+import com.omiicare.qa.shared.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,11 +11,10 @@ import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
-import com.omiicare.qa.shared.domain.BaseEntity;
 
 /**
- * A platform user. Tenant-scoped and assigned one or more RBAC roles. Maps to the
- * {@code app_user} table from the V1 baseline schema.
+ * A platform user. Tenant-scoped and assigned one or more RBAC roles. Maps to the {@code app_user}
+ * table from the V1 baseline schema.
  */
 @Entity
 @Table(name = "app_user")

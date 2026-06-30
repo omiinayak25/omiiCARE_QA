@@ -20,7 +20,8 @@ class AiProviderFactoryTest {
 
     @Test
     void hostedProviderWithoutKeyFailsFastWithoutNetworkCall() {
-        AiProvider provider = AiProviderFactory.create(AiConfig.of(true, "claude", "claude-opus-4-8", ""));
+        AiProvider provider =
+                AiProviderFactory.create(AiConfig.of(true, "claude", "claude-opus-4-8", ""));
         assertThatThrownBy(() -> provider.complete(new AiRequest(null, "hi", 64)))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("API key");

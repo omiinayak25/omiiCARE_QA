@@ -19,8 +19,8 @@ import java.util.Map;
 
 /**
  * Cucumber step definitions for patient registration (glue package referenced by
- * junit-platform.properties). Reusable steps interacting with the SUT through the
- * adapter layer. Tagged {@code @bdd} in the feature so excluded by default.
+ * junit-platform.properties). Reusable steps interacting with the SUT through the adapter layer.
+ * Tagged {@code @bdd} in the feature so excluded by default.
  */
 public class PatientRegistrationSteps {
 

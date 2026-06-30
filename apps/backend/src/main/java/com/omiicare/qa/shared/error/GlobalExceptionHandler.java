@@ -18,10 +18,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
- * Centralized exception framework. No controller handles exceptions directly;
- * every error is translated here into a consistent RFC 7807 {@link ProblemDetail}
- * carrying the canonical {@link ErrorCode}, the correlation ID, and (for
- * validation) per-field details.
+ * Centralized exception framework. No controller handles exceptions directly; every error is
+ * translated here into a consistent RFC 7807 {@link ProblemDetail} carrying the canonical {@link
+ * ErrorCode}, the correlation ID, and (for validation) per-field details.
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -50,8 +49,10 @@ public class GlobalExceptionHandler {
         for (FieldError fe : ex.getBindingResult().getFieldErrors()) {
             fieldErrors.add(
                     java.util.Map.of(
-                            "field", fe.getField(),
-                            "message", fe.getDefaultMessage() == null ? "invalid" : fe.getDefaultMessage()));
+                            "field",
+                            fe.getField(),
+                            "message",
+                            fe.getDefaultMessage() == null ? "invalid" : fe.getDefaultMessage()));
         }
         problem.setProperty("errors", fieldErrors);
         return ResponseEntity.status(ErrorCode.VALIDATION_FAILED.status()).body(problem);
@@ -72,7 +73,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ProblemDetail> handleUnexpected(Exception ex, HttpServletRequest request) {
+    public ResponseEntity<ProblemDetail> handleUnexpected(
+            Exception ex, HttpServletRequest request) {
         log.error("Unhandled exception", ex);
         ProblemDetail problem =
                 base(ErrorCode.INTERNAL_ERROR, "An unexpected error occurred", request);

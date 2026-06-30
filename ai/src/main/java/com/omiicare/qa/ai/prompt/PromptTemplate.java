@@ -5,9 +5,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * A reusable prompt template with {@code {{variable}}} placeholders. Rendering
- * substitutes provided variables; an unresolved placeholder is a programming error
- * (fail fast) so prompts are never silently sent with missing context.
+ * A reusable prompt template with {@code {{variable}}} placeholders. Rendering substitutes provided
+ * variables; an unresolved placeholder is a programming error (fail fast) so prompts are never
+ * silently sent with missing context.
  */
 public final class PromptTemplate {
 
@@ -33,7 +33,11 @@ public final class PromptTemplate {
             String value = variables.get(key);
             if (value == null) {
                 throw new IllegalArgumentException(
-                        "Missing value for prompt variable '" + key + "' in template '" + name + "'");
+                        "Missing value for prompt variable '"
+                                + key
+                                + "' in template '"
+                                + name
+                                + "'");
             }
             matcher.appendReplacement(out, Matcher.quoteReplacement(value));
         }

@@ -10,9 +10,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 /**
- * Milestone 2 smoke tests: verify the application context loads under the test
- * profile, Flyway applies the baseline schema, and the seed data is present.
- * These guard the bootable infrastructure shell, not business behavior.
+ * Milestone 2 smoke tests: verify the application context loads under the test profile, Flyway
+ * applies the baseline schema, and the seed data is present. These guard the bootable
+ * infrastructure shell, not business behavior.
  */
 @SpringBootTest
 @ActiveProfiles("test")

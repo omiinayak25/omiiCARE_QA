@@ -5,10 +5,9 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * Layered configuration for the automation platform. Precedence (highest first):
- * JVM system properties, environment variables, then the bundled
- * {@code framework.properties}. Nothing is hardcoded in tests — every endpoint,
- * credential, and environment name is resolved here.
+ * Layered configuration for the automation platform. Precedence (highest first): JVM system
+ * properties, environment variables, then the bundled {@code framework.properties}. Nothing is
+ * hardcoded in tests — every endpoint, credential, and environment name is resolved here.
  */
 public final class FrameworkConfig {
 

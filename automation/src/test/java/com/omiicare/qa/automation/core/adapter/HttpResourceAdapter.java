@@ -4,9 +4,9 @@ import com.omiicare.qa.automation.core.config.FrameworkConfig;
 import com.omiicare.qa.automation.core.config.TargetSystem;
 
 /**
- * Default HTTP adapter: resolves the base URI for any {@link TargetSystem} from
- * configuration. Suitable for REST/FHIR targets reached over HTTP; specialized
- * adapters can extend this when a system needs bespoke auth or pathing.
+ * Default HTTP adapter: resolves the base URI for any {@link TargetSystem} from configuration.
+ * Suitable for REST/FHIR targets reached over HTTP; specialized adapters can extend this when a
+ * system needs bespoke auth or pathing.
  */
 public class HttpResourceAdapter implements ResourceAdapter {
 

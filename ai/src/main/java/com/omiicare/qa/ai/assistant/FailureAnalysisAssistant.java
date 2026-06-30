@@ -11,14 +11,14 @@ import com.omiicare.qa.ai.security.PromptGuardrails;
 import java.util.Map;
 
 /**
- * AI-assisted failure analysis: given test logs / stack traces, it builds a
- * reviewed prompt and asks the configured provider for a probable root cause,
- * evidence, suggested next steps, and a confidence level. The result is always
- * marked AI-assisted and intended for human review — it never auto-acts.
+ * AI-assisted failure analysis: given test logs / stack traces, it builds a reviewed prompt and
+ * asks the configured provider for a probable root cause, evidence, suggested next steps, and a
+ * confidence level. The result is always marked AI-assisted and intended for human review — it
+ * never auto-acts.
  *
- * <p>Behavior respects {@link AiConfig}: when AI is disabled the assistant returns
- * a clear "disabled" notice instead of calling any provider, and input is screened
- * by {@link PromptGuardrails} so secrets are never transmitted.
+ * <p>Behavior respects {@link AiConfig}: when AI is disabled the assistant returns a clear
+ * "disabled" notice instead of calling any provider, and input is screened by {@link
+ * PromptGuardrails} so secrets are never transmitted.
  */
 public class FailureAnalysisAssistant {
 

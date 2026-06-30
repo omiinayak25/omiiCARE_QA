@@ -14,14 +14,13 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
- * Establishes correlation and request identifiers for every inbound request and
- * publishes them to the SLF4J {@link MDC} so they appear in every structured log
- * line and propagate to downstream spans.
+ * Establishes correlation and request identifiers for every inbound request and publishes them to
+ * the SLF4J {@link MDC} so they appear in every structured log line and propagate to downstream
+ * spans.
  *
- * <p>This is the Milestone 2 observability foundation. Distributed tracing
- * (trace/span IDs) is contributed by Micrometer Tracing → OpenTelemetry; this
- * filter guarantees a stable correlation ID even before a trace context exists
- * and echoes it back to the caller for end-to-end debugging.
+ * <p>This is the Milestone 2 observability foundation. Distributed tracing (trace/span IDs) is
+ * contributed by Micrometer Tracing → OpenTelemetry; this filter guarantees a stable correlation ID
+ * even before a trace context exists and echoes it back to the caller for end-to-end debugging.
  */
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)

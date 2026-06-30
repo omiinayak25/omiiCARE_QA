@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Read-only provider directory used when scheduling. Any authenticated user may
- * browse providers; provider administration is out of scope for this milestone.
+ * Read-only provider directory used when scheduling. Any authenticated user may browse providers;
+ * provider administration is out of scope for this milestone.
  */
 @RestController
 @RequestMapping("/api/v1/providers")
@@ -44,7 +44,8 @@ public class ProviderController {
                         providerRepository
                                 .findAllByTenantId(
                                         TenantContext.getTenantId(),
-                                        PageRequest.of(Math.max(page, 0), safeSize, Sort.by("lastName")))
+                                        PageRequest.of(
+                                                Math.max(page, 0), safeSize, Sort.by("lastName")))
                                 .map(ProviderResponse::from)));
     }
 

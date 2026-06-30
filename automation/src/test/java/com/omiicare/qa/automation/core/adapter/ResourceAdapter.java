@@ -3,9 +3,9 @@ package com.omiicare.qa.automation.core.adapter;
 import com.omiicare.qa.automation.core.config.TargetSystem;
 
 /**
- * Common interface every target system implements. Tests call the interface, not
- * the system, so a new target is added by writing a new adapter and existing
- * tests remain unchanged (Adapter pattern).
+ * Common interface every target system implements. Tests call the interface, not the system, so a
+ * new target is added by writing a new adapter and existing tests remain unchanged (Adapter
+ * pattern).
  */
 public interface ResourceAdapter {
 

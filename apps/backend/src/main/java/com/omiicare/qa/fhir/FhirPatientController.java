@@ -14,10 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * FHIR R4 read facade for Patient. Returns {@code application/fhir+json}. The
- * resource is produced from the internal model by {@link FhirPatientMapper}, so
- * the FHIR surface stays decoupled from persistence. Tenant-scoped and gated by
- * the {@code patient:read} permission.
+ * FHIR R4 read facade for Patient. Returns {@code application/fhir+json}. The resource is produced
+ * from the internal model by {@link FhirPatientMapper}, so the FHIR surface stays decoupled from
+ * persistence. Tenant-scoped and gated by the {@code patient:read} permission.
  */
 @RestController
 @RequestMapping("/api/v1/fhir/Patient")

@@ -5,10 +5,9 @@ import java.util.Locale;
 import net.datafaker.Faker;
 
 /**
- * Produces realistic, PHI-safe synthetic patients (Factory/Builder pattern over
- * Datafaker). All data is fictional — never real patient information. Output is
- * deterministic per-call only in field shape, not value, which suits fresh test
- * data generation.
+ * Produces realistic, PHI-safe synthetic patients (Factory/Builder pattern over Datafaker). All
+ * data is fictional — never real patient information. Output is deterministic per-call only in
+ * field shape, not value, which suits fresh test data generation.
  */
 public class PatientFactory {
 
@@ -27,8 +26,7 @@ public class PatientFactory {
     public SyntheticPatient newPatient() {
         String first = faker.name().firstName();
         String last = faker.name().lastName();
-        LocalDate dob =
-                LocalDate.now().minusYears(faker.number().numberBetween(1, 95));
+        LocalDate dob = LocalDate.now().minusYears(faker.number().numberBetween(1, 95));
         String gender = GENDERS[faker.number().numberBetween(0, GENDERS.length)];
         // Use the example.com / test domain to keep contact data non-routable.
         String email =

@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 /**
- * Maps an internal {@link PatientEntity} to a FHIR R4 {@code Patient} resource
- * representation (as an ordered map serialized to JSON). This is the v1.0
- * read-side mapping; full FHIR validation and a server facade arrive in
- * Milestone 7. Code-system URIs follow the FHIR guide (docs/FHIR_GUIDE.md).
+ * Maps an internal {@link PatientEntity} to a FHIR R4 {@code Patient} resource representation (as
+ * an ordered map serialized to JSON). This is the v1.0 read-side mapping; full FHIR validation and
+ * a server facade arrive in Milestone 7. Code-system URIs follow the FHIR guide
+ * (docs/FHIR_GUIDE.md).
  */
 @Component
 public class FhirPatientMapper {

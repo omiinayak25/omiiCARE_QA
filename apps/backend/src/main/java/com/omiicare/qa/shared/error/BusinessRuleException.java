@@ -1,8 +1,8 @@
 package com.omiicare.qa.shared.error;
 
 /**
- * Thrown when a documented healthcare business rule is violated (see
- * docs/BUSINESS_RULES.md). Maps to HTTP 422 Unprocessable Entity.
+ * Thrown when a documented healthcare business rule is violated (see docs/BUSINESS_RULES.md). Maps
+ * to HTTP 422 Unprocessable Entity.
  */
 public class BusinessRuleException extends ApiException {
 

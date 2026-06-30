@@ -16,9 +16,8 @@ public interface AppointmentRepository extends JpaRepository<AppointmentEntity, 
     Page<AppointmentEntity> findAllByTenantId(Long tenantId, Pageable pageable);
 
     /**
-     * Counts active (non-cancelled) appointments for a provider that overlap the
-     * given half-open interval [start, end). Used to enforce the no-double-booking
-     * business rule.
+     * Counts active (non-cancelled) appointments for a provider that overlap the given half-open
+     * interval [start, end). Used to enforce the no-double-booking business rule.
      */
     @Query(
             """

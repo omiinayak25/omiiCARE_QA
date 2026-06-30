@@ -10,9 +10,9 @@ import jakarta.persistence.PreUpdate;
 import java.time.Instant;
 
 /**
- * Mapped superclass providing a generated identity and creation/update audit
- * timestamps for persistent entities. Timestamps are maintained by JPA lifecycle
- * callbacks so domain code never sets them by hand.
+ * Mapped superclass providing a generated identity and creation/update audit timestamps for
+ * persistent entities. Timestamps are maintained by JPA lifecycle callbacks so domain code never
+ * sets them by hand.
  */
 @MappedSuperclass
 public abstract class BaseEntity {

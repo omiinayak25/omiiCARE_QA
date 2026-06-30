@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Patient management API. Authorization is permission-based ({@code patient:read}
- * / {@code patient:write}) so access does not depend on hardcoded role names.
+ * Patient management API. Authorization is permission-based ({@code patient:read} / {@code
+ * patient:write}) so access does not depend on hardcoded role names.
  */
 @RestController
 @RequestMapping("/api/v1/patients")

@@ -3,9 +3,9 @@ package com.omiicare.qa.shared.error;
 import org.springframework.http.HttpStatus;
 
 /**
- * Canonical, stable error codes surfaced to API clients. Each maps to an HTTP
- * status and a human-readable default title. Codes are part of the public API
- * contract and must not be renumbered once released.
+ * Canonical, stable error codes surfaced to API clients. Each maps to an HTTP status and a
+ * human-readable default title. Codes are part of the public API contract and must not be
+ * renumbered once released.
  */
 public enum ErrorCode {
     VALIDATION_FAILED("OMII-400", HttpStatus.BAD_REQUEST, "Validation failed"),
