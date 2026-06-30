@@ -1,0 +1,44 @@
+# Dependabot — weekly dependency updates for Maven, npm, and GitHub Actions.
+version: 2
+updates:
+  # Maven reactor (root pom + modules resolved transitively).
+  - package-ecosystem: maven
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+      - backend
+    commit-message:
+      prefix: "build(deps)"
+
+  # Frontend npm dependencies.
+  - package-ecosystem: npm
+    directory: "/apps/frontend"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+      - frontend
+    commit-message:
+      prefix: "build(deps)"
+
+  # GitHub Actions used by the workflows.
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+      - ci
+    commit-message:
+      prefix: "ci(deps)"

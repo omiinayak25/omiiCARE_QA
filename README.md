@@ -1,9 +1,12 @@
 # omiiCARE_QA
 
-[![Build](https://img.shields.io/badge/build-pending--M8-lightgrey?style=flat-square)](.github/workflows)
-[![License: MIT](https://img.shields.io/badge/license-MIT%20%2B%20healthcare%20notice-blue?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.1.0-orange?style=flat-square)](CHANGELOG.md)
-[![Docs](https://img.shields.io/badge/docs-Milestone%201-brightgreen?style=flat-square)](docs/)
+[![Build](https://img.shields.io/badge/build-passing-brightgreen?style=flat-square)](.github/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
+[![Version](https://img.shields.io/badge/version-0.8.0-orange?style=flat-square)](CHANGELOG.md)
+[![Java](https://img.shields.io/badge/Java-21-007396?style=flat-square&logo=openjdk&logoColor=white)](pom.xml)
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black)](apps/frontend/package.json)
+[![Docs](https://img.shields.io/badge/docs-passing-brightgreen?style=flat-square)](docs/)
+[![Quality Gates](https://img.shields.io/badge/quality%20gates-enforced-success?style=flat-square)](docs/QUALITY_GATES.md)
 [![SemVer](https://img.shields.io/badge/semver-2.0.0-informational?style=flat-square)](VERSIONING.md)
 [![Conventional Commits](https://img.shields.io/badge/commits-conventional-yellow?style=flat-square)](CONTRIBUTING.md)
 

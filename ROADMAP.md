@@ -114,7 +114,7 @@ contract/FHIR validation; chaos architecture; resilience patterns; observability
 executions; no formal certification claims.
 **Gate:** Frameworks operational; chaos documented; observability integrated.
 
-### ⬜ Milestone 8 — Enterprise DevOps, CI/CD & Release Engineering
+### ✅ Milestone 8 — Enterprise DevOps, CI/CD & Release Engineering
 **Goal:** Production-grade DevOps/CI/CD.
 **Deliverables:** reusable GitHub Actions (build/lint/test/scan/release/deploy);
 pipeline & branch strategy with protections; GitHub project management; quality

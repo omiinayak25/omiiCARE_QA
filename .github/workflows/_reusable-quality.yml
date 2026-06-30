@@ -1,0 +1,48 @@
+# Reusable quality gate — runs the -Pquality verify chain (Checkstyle, PMD,
+# SpotBugs, Spotless, JaCoCo). Currently advisory (continue-on-error) so the
+# gate can harden over time: severities and baselines are raised incrementally
+# until the step is flipped to blocking.
+---
+name: _reusable-quality
+
+on:
+  workflow_call:
+    inputs:
+      java-version:
+        description: "JDK version to run the quality gate with"
+        required: false
+        type: string
+        default: "21"
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Quality Gate (static analysis)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ inputs.java-version }}
+          cache: maven
+
+      # Advisory for now: the quality gate hardens over time. As baselines are
+      # agreed and severities raised, remove continue-on-error to make it block.
+      - name: Quality verify (Checkstyle / PMD / SpotBugs / Spotless / JaCoCo)
+        continue-on-error: true
+        run: mvn -B -ntp -Pquality verify checkstyle:check pmd:check
+
+      - name: Upload JaCoCo reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-jacoco-report
+          path: "**/target/site/jacoco/**"
+          if-no-files-found: ignore
+          retention-days: 7

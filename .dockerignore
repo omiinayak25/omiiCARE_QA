@@ -1,0 +1,17 @@
+# Build-context ignore for images built from the repository root (backend).
+**/target
+**/node_modules
+**/dist
+**/.git
+**/logs
+**/*.log
+**/.env
+**/.env.*
+!**/.env.example
+**/coverage
+**/allure-results
+**/allure-report
+**/test-results
+**/playwright-report
+manual-testing
+docs

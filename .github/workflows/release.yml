@@ -1,0 +1,80 @@
+# Release pipeline — triggered when a v* tag is pushed. Builds and tests both
+# stacks, builds and pushes Docker images to GHCR, and publishes a GitHub
+# Release with notes drawn from the CHANGELOG plus build artifacts.
+---
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  backend:
+    name: Backend
+    uses: ./.github/workflows/_reusable-backend.yml
+
+  frontend:
+    name: Frontend
+    uses: ./.github/workflows/_reusable-frontend.yml
+
+  docker:
+    name: Docker (build & push)
+    needs: [backend, frontend]
+    uses: ./.github/workflows/_reusable-docker.yml
+    with:
+      push: true
+      version: ${{ github.ref_name }}
+
+  release:
+    name: Publish GitHub Release
+    needs: [backend, frontend, docker]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - name: Package backend jar
+        run: mvn -B -ntp -pl apps/backend -am package -DskipTests
+
+      - name: Download frontend dist
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend-dist
+
+      - name: Extract release notes from CHANGELOG
+        id: notes
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          awk -v ver="$version" '
+            $0 ~ "^## \\[" ver "\\]" {flag=1; next}
+            flag && /^## \[/ {flag=0}
+            flag {print}
+          ' CHANGELOG.md > release-notes.md
+          if [ ! -s release-notes.md ]; then
+            echo "Release ${GITHUB_REF_NAME}. See CHANGELOG.md for details." > release-notes.md
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: omiiCARE_QA ${{ github.ref_name }}
+          body_path: release-notes.md
+          draft: false
+          prerelease: false
+          files: |
+            apps/backend/target/*.jar
+            frontend-dist/**

@@ -1,0 +1,74 @@
+# Nightly pipeline — full build + tests, end-to-end note, and dependency scan.
+# Runs on a nightly schedule and on manual dispatch. Composes reusable units.
+---
+name: Nightly
+
+on:
+  schedule:
+    # 02:30 UTC every day.
+    - cron: "30 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend (full verify)
+    uses: ./.github/workflows/_reusable-backend.yml
+
+  frontend:
+    name: Frontend (full build)
+    uses: ./.github/workflows/_reusable-frontend.yml
+
+  quality:
+    name: Quality Gate (deep)
+    uses: ./.github/workflows/_reusable-quality.yml
+
+  e2e:
+    name: End-to-End Tests
+    needs: [backend, frontend]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      # The automation module exposes an -Pe2e profile for end-to-end runs.
+      # Allowed to continue: e2e depends on a deployed environment and is
+      # reported rather than blocking the nightly schedule.
+      - name: Run end-to-end suite (automation -Pe2e)
+        continue-on-error: true
+        run: mvn -B -ntp -pl automation -am test -Pe2e
+
+      - name: Upload e2e Surefire reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-e2e-reports
+          path: "automation/target/surefire-reports/**"
+          if-no-files-found: ignore
+          retention-days: 14
+
+  dependency-scan:
+    name: Dependency Vulnerability Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Trivy filesystem scan
+        continue-on-error: true
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          format: table
+          severity: HIGH,CRITICAL
+          exit-code: "0"

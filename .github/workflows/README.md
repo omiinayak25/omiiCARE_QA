@@ -1,84 +1,116 @@
 # omiiCARE_QA — GitHub Actions Workflows
 
 CI/CD for the omiiCARE_QA monorepo is built on **reusable workflows**
-(`workflow_call`). Each concern (build, test, lint, security, docs) is a single
-reusable unit; top-level "entry" pipelines compose them. This keeps logic
-DRY and lets every event-driven pipeline share the same, audited steps.
+(`workflow_call`). Each concern (backend, frontend, quality, Docker) is a single
+reusable unit; top-level "entry" pipelines compose them for each trigger. This
+keeps logic DRY and lets every event-driven pipeline share the same audited steps.
 
-> **Milestone 2 status:** the reusable units below are *skeletons* — correct
-> structure, minimal steps, advisory (`continue-on-error`) where appropriate.
-> The full event matrix and blocking gates land in **Milestone 8**.
+> **Milestone 8 status:** the reusable units below are real pipelines wired into
+> the full event matrix. The quality gate is advisory (`continue-on-error`) and
+> hardens over time as baselines are agreed.
 
-## 1. Overview
+## 1. Pipeline Matrix
 
-| Workflow | Type | Trigger | Status |
-|----------|------|---------|--------|
-| `_reusable-build.yml` | reusable | `workflow_call` | skeleton |
-| `_reusable-test.yml` | reusable | `workflow_call` | skeleton |
-| `_reusable-lint.yml` | reusable | `workflow_call` | skeleton |
-| `_reusable-security-scan.yml` | reusable | `workflow_call` | skeleton |
-| `_reusable-docs.yml` | reusable | `workflow_call` | skeleton |
-| `ci.yml` | entry | `push`/`pull_request` (main, develop) | active (composes build+test+lint) |
+| Pipeline | Trigger | Composes / Does |
+|----------|---------|------------------|
+| **PR gate** (`ci.yml`) | `pull_request` → main/develop | backend + frontend + quality |
+| **Push gate** (`ci.yml`) | `push` → main/develop | backend + frontend + quality |
+| **Nightly** (`nightly.yml`) | `schedule` (02:30 UTC daily) + `workflow_dispatch` | backend + frontend + quality + e2e (note) + dependency scan |
+| **Release** (`release.yml`) | `push` tag `v*` | backend + frontend + Docker build/push + GitHub Release |
+| **Hotfix** | `push` → `hotfix/**` (covered by `ci.yml` branch rules + tag release) | fast build + test via PR gate; ship via `v*` tag |
+| **Manual dispatch** | `workflow_dispatch` (nightly) | on-demand full run |
+| **CodeQL** (`codeql.yml`) | push / PR / weekly schedule | Java + JavaScript/TypeScript SAST |
+| **Dependency review** (`dependency-review.yml`) | `pull_request` | new-dependency vuln/license gate |
+| **Labeler** (`labeler.yml`) | `pull_request_target` | path-based PR auto-labels |
 
 ## 2. Reusable Workflow Strategy
 
 - **Naming:** reusable units are prefixed `_reusable-` and are never triggered
   directly — only via `uses:`.
-- **Inputs:** common inputs (e.g. `java-version`) are passed through so callers
-  control matrix dimensions without forking the unit.
+- **Inputs:** common inputs (`java-version`, `node-version`, `push`, `version`)
+  are passed through so callers control matrix dimensions without forking the unit.
 - **Single responsibility:** one concern per file; composition happens in the
   entry pipelines, not inside the reusable units.
 - **Local reference:** entry pipelines call units with
   `uses: ./.github/workflows/_reusable-*.yml` so versions stay in lockstep with
   the branch under test.
 
-## 3. How `ci.yml` Composes the Skeletons
+| Reusable unit | Responsibility |
+|---------------|----------------|
+| `_reusable-backend.yml` | `mvn -pl apps/backend -am verify`; uploads Surefire + JaCoCo |
+| `_reusable-frontend.yml` | `npm ci` / `npm run lint` / `npm run build`; uploads `dist` |
+| `_reusable-quality.yml` | `-Pquality verify checkstyle:check pmd:check` (advisory) |
+| `_reusable-docker.yml` | Buildx build of backend + frontend images; push to GHCR when `push=true` |
+
+The original Milestone 2 skeletons (`_reusable-build.yml`, `_reusable-test.yml`,
+`_reusable-lint.yml`, `_reusable-security-scan.yml`, `_reusable-docs.yml`) remain
+as advisory helpers and are superseded by the units above for the entry pipelines.
+
+## 3. Composition
 
 ```text
-ci.yml  (push / PR on main, develop)
-  └─ build  →  _reusable-build.yml
-       ├─ test  (needs: build)  →  _reusable-test.yml
-       └─ lint  (needs: build)  →  _reusable-lint.yml
+ci.yml (push / PR on main, develop)
+  ├─ backend   →  _reusable-backend.yml
+  ├─ frontend  →  _reusable-frontend.yml
+  └─ quality   →  _reusable-quality.yml
+
+release.yml (tag v*)
+  ├─ backend   →  _reusable-backend.yml
+  ├─ frontend  →  _reusable-frontend.yml
+  ├─ docker    →  _reusable-docker.yml (push=true)
+  └─ release   →  softprops/action-gh-release@v2
 ```
 
-`build` runs first; `test` and `lint` fan out from it in parallel. Security and
-docs units exist as skeletons and are wired into the entry pipelines in M8.
+## 4. Quality Gates — what fails a pipeline
 
-## 4. Planned Pipeline Matrix (Milestone 8)
+| Gate | Where | Blocking? |
+|------|-------|-----------|
+| Backend build + unit tests | `_reusable-backend.yml` (`mvn verify`) | Yes |
+| Frontend type-check + build | `_reusable-frontend.yml` (`npm run build`) | Yes |
+| Frontend lint (`--max-warnings=0`) | `_reusable-frontend.yml` (`npm run lint`) | Yes |
+| Static analysis (Checkstyle/PMD/SpotBugs/Spotless) | `_reusable-quality.yml` | Advisory (hardens over time) |
+| Coverage (JaCoCo) | `_reusable-quality.yml` / backend | Reported (artifact) |
+| CodeQL SAST | `codeql.yml` | Reported to Security tab |
+| Dependency review | `dependency-review.yml` (`fail-on-severity: high`) | Yes on PRs |
+| Dependency vuln scan (Trivy) | `nightly.yml` | Advisory (nightly) |
+| Docker image build | `_reusable-docker.yml` | Yes on release |
 
-| Pipeline | Trigger | Composes |
-|----------|---------|----------|
-| **pull-request** | `pull_request` → main/develop | build + test + lint + security-scan + docs |
-| **push** | `push` → develop | build + test + lint |
-| **nightly** | `schedule` (cron) | build + full test + security-scan (deep) + docs |
-| **release** | `push` tag `v*` / `release` | build + test + security-scan + publish artifacts |
-| **hotfix** | `push` → `hotfix/**` | build + test (fast) + lint |
+## 5. Branch Protection Summary
 
-## 5. Configuration Dependencies
+- **main** — protected: require PR, ≥1 review, required status checks
+  (`Backend`, `Frontend`, `Quality Gate`, `Dependency Review`, CodeQL), linear
+  history, no force-push. Releases are cut from `main` via `v*` tags.
+- **develop** — protected: require PR, required status checks (`Backend`,
+  `Frontend`, `Quality Gate`). Integration branch for feature work.
+- **feature/**, **release/**, **hotfix/** branches PR into `develop`/`main`;
+  the PR gate runs on every push.
 
-The lint unit consumes the shared static-analysis configs under `config/`
-(`checkstyle`, `pmd`, `spotbugs`, `spotless`). See `config/README.md`.
+## 6. Environment Promotion
 
-## 6. Local Reproduction
-
-Most steps map 1:1 to Maven goals runnable locally:
-
-```bash
-mvn -B -ntp -DskipTests install        # build
-mvn -B -ntp test                       # test
-mvn -B -ntp -Pquality spotless:check checkstyle:check pmd:check   # lint
+```text
+Dev  →  QA  →  Stage  →  Prod
 ```
+
+- **Dev** — auto-deploy from `develop` (no approval).
+- **QA** — auto-deploy after nightly green; manual smoke sign-off.
+- **Stage** — deploy release candidate (`v*-rc`) with a required reviewer
+  (GitHub Environment protection rule).
+- **Prod** — deploy tagged release (`v*`) with a required approver + wait timer;
+  rollback by re-deploying the previous image tag.
+
+Secrets are supplied per environment via **GitHub Secrets / Environments** and
+are never hardcoded in workflow files.
 
 ## 7. Conventions & Maintenance
 
-- Pin third-party actions to a tag/SHA; bump deliberately.
+- Pin third-party actions to a tag/SHA; bump deliberately (Dependabot covers this).
 - Keep reusable units small and side-effect free; do composition in entry files.
-- Advisory steps (`continue-on-error: true`) are temporary for M2 and must be
-  reviewed/removed as gates become blocking in M8.
+- Advisory steps (`continue-on-error: true`) are reviewed each milestone and
+  flipped to blocking as gates mature.
 - Set least-privilege `permissions:` per workflow.
 
 ## 8. Version History
 
 | Version | Date | Author | Notes |
 |---------|------|--------|-------|
-| 1.0 | 2026-06-30 | Code Quality Engineer | Initial reusable skeletons (Milestone 2) |
+| 1.0 | 2026-06-30 | DevOps Engineer | Initial (Milestone 8) |

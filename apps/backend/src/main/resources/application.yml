@@ -54,7 +54,7 @@ info:
   application:
     name: omiiCARE_QA
     description: Enterprise Healthcare Quality Engineering Platform
-    version: 0.7.0
+    version: 0.8.0
 
 # Application-specific namespace (read by typed @ConfigurationProperties).
 omiicare:

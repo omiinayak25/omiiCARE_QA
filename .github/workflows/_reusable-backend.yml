@@ -1,0 +1,52 @@
+# Reusable backend pipeline — builds and tests the Spring Boot backend module.
+# Called via workflow_call from ci.yml, nightly.yml and release.yml.
+---
+name: _reusable-backend
+
+on:
+  workflow_call:
+    inputs:
+      java-version:
+        description: "JDK version to build/test with"
+        required: false
+        type: string
+        default: "21"
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend (Maven verify)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ inputs.java-version }}
+          cache: maven
+
+      - name: Build & verify backend (with dependencies)
+        run: mvn -B -ntp -pl apps/backend -am verify
+
+      - name: Upload Surefire reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-surefire-reports
+          path: "apps/backend/target/surefire-reports/**"
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Upload JaCoCo coverage report
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-jacoco-report
+          path: "apps/backend/target/site/jacoco/**"
+          if-no-files-found: ignore
+          retention-days: 7

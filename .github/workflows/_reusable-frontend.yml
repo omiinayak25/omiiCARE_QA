@@ -1,0 +1,52 @@
+# Reusable frontend pipeline — installs, lints, and builds the React/Vite app.
+# Called via workflow_call from ci.yml, nightly.yml and release.yml.
+---
+name: _reusable-frontend
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: "Node.js version to build with"
+        required: false
+        type: string
+        default: "22"
+
+permissions:
+  contents: read
+
+jobs:
+  frontend:
+    name: Frontend (npm ci / lint / build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: npm
+          cache-dependency-path: apps/frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload dist artifact
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: "apps/frontend/dist/**"
+          if-no-files-found: ignore
+          retention-days: 7

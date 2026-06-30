@@ -12,6 +12,36 @@ See [VERSIONING.md](VERSIONING.md) for the versioning policy.
 
 - Changes accumulating toward the next release.
 
+## [0.8.0] - 2026-06-30
+
+Milestone 8 — Enterprise DevOps, CI/CD & Release Engineering. A reusable,
+production-grade GitHub Actions ecosystem, container images, quality gates, and
+release automation. No AI enhancements yet (Milestone 9).
+
+### Added
+
+- **Container images:** multi-stage `apps/backend/Dockerfile` (Maven build → slim
+  JRE, non-root, healthcheck) and `apps/frontend/Dockerfile` (Vite build → nginx
+  with SPA fallback, security headers, API proxy), plus `.dockerignore` files.
+- **Reusable workflows:** `_reusable-backend` (Maven verify + JaCoCo/surefire
+  artifacts), `_reusable-frontend` (npm ci/lint/build + dist artifact),
+  `_reusable-quality` (Checkstyle/PMD/SpotBugs/Spotless, advisory), and
+  `_reusable-docker` (Buildx build, push gated on input).
+- **Entry pipelines:** `ci.yml` (PR/push gate on main & develop), `nightly.yml`
+  (scheduled full build + e2e + Trivy scan), and `release.yml` (`v*` tags →
+  build/test → GHCR images → GitHub Release from the changelog).
+- **Security automation:** `codeql.yml` (Java + JS/TS), `dependency-review.yml`,
+  and `dependabot.yml` (Maven, npm, GitHub Actions, weekly).
+- **Project automation:** path-based PR auto-labeling (`labeler.yml`).
+- **Governance docs:** `docs/CI_CD_GUIDE.md`, `docs/BRANCHING_STRATEGY.md`, and
+  `docs/QUALITY_GATES.md`; the workflows README documents the pipeline matrix.
+- **README badges:** build, license, version, Java 21, React 18, docs, quality gates.
+
+### Changed
+
+- Replaced the Milestone 2 reusable-workflow skeletons with real pipelines and
+  removed the now-superseded skeleton files (no dead workflows). Reactor 0.8.0.
+
 ## [0.7.0] - 2026-06-30
 
 Milestone 7 — Advanced Quality Engineering Platform. Reusable frameworks and
@@ -252,7 +282,8 @@ no application, API, or automation code by design.
   plus the cross-document consistency baseline.
 - **License:** MIT license with a healthcare-data notice.
 
-[Unreleased]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.4.0...v0.5.0

@@ -1,0 +1,45 @@
+# Path-based PR labels consumed by actions/labeler@v5 (.github/workflows/labeler.yml).
+backend:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "apps/backend/**"
+
+frontend:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "apps/frontend/**"
+
+automation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "automation/**"
+          - "quality/**"
+
+docs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "docs/**"
+          - "**/*.md"
+
+quality:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "config/checkstyle/**"
+          - "config/pmd/**"
+          - "config/spotbugs/**"
+          - "config/spotless/**"
+
+infra:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/Dockerfile"
+          - "**/docker-compose*.yml"
+          - "infra/**"
+          - "deploy/**"
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/workflows/**"
+          - ".github/labeler.yml"
+          - ".github/dependabot.yml"

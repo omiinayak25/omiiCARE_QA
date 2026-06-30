@@ -1,6 +1,5 @@
-# Entry CI pipeline — composes the reusable workflow skeletons.
-# Milestone 2: ties skeletons together. Full matrices (nightly, release,
-# hotfix, security, docs) are added in Milestone 8 — see workflows/README.md.
+# Entry CI pipeline — the PR/push quality gate for main and develop.
+# Composes the reusable backend, frontend, and quality workflows. Milestone 8.
 ---
 name: CI
 
@@ -13,17 +12,19 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  build:
-    name: Build
-    uses: ./.github/workflows/_reusable-build.yml
+  backend:
+    name: Backend
+    uses: ./.github/workflows/_reusable-backend.yml
 
-  test:
-    name: Test
-    needs: build
-    uses: ./.github/workflows/_reusable-test.yml
+  frontend:
+    name: Frontend
+    uses: ./.github/workflows/_reusable-frontend.yml
 
-  lint:
-    name: Lint
-    needs: build
-    uses: ./.github/workflows/_reusable-lint.yml
+  quality:
+    name: Quality Gate
+    uses: ./.github/workflows/_reusable-quality.yml
