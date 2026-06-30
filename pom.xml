@@ -48,7 +48,7 @@
         <!-- Dependency versions (managed centrally) -->
         <mapstruct.version>1.6.2</mapstruct.version>
         <springdoc.version>2.6.0</springdoc.version>
-        <jjwt.version>0.12.6</jjwt.version>
+        <jjwt.version>0.13.0</jjwt.version>
         <testcontainers.version>1.20.2</testcontainers.version>
         <opentelemetry.version>1.42.1</opentelemetry.version>
 
