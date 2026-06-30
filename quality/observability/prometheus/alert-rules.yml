@@ -1,0 +1,82 @@
+# =============================================================================
+# omiiCARE QA — Prometheus Alerting Rules
+# -----------------------------------------------------------------------------
+# Loaded by the M2 Prometheus instance. Add to prometheus.yml:
+#
+#   rule_files:
+#     - /etc/prometheus/alert-rules.yml
+#
+# Mount this file into the prometheus container (read-only), e.g.:
+#   ../../quality/observability/prometheus/alert-rules.yml:/etc/prometheus/alert-rules.yml:ro
+#
+# Metric names match Spring Boot Actuator + Micrometer (/actuator/prometheus):
+#   - http_server_requests_seconds_count / _sum / _bucket
+#   - jvm_memory_used_bytes / jvm_memory_max_bytes
+#   - up (Prometheus target health)
+# =============================================================================
+
+groups:
+  - name: omiicare-availability
+    rules:
+      - alert: BackendInstanceDown
+        expr: up{job="omiicare-backend"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: omiicare-backend
+        annotations:
+          summary: "omiiCARE backend target is down"
+          description: "Prometheus has not been able to scrape {{ $labels.instance }} for over 1 minute."
+
+  - name: omiicare-errors
+    rules:
+      # 5xx error ratio over a 5-minute window exceeds 5%.
+      - alert: HighHttpErrorRate
+        expr: |
+          (
+            sum(rate(http_server_requests_seconds_count{job="omiicare-backend", status=~"5.."}[5m]))
+            /
+            clamp_min(sum(rate(http_server_requests_seconds_count{job="omiicare-backend"}[5m])), 1e-9)
+          ) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+          service: omiicare-backend
+        annotations:
+          summary: "High HTTP 5xx error rate (> 5%)"
+          description: "The backend is returning more than 5% server errors over the last 5 minutes (current: {{ $value | humanizePercentage }})."
+
+  - name: omiicare-latency
+    rules:
+      # p99 request latency over 5 minutes exceeds 1s.
+      - alert: HighP99Latency
+        expr: |
+          histogram_quantile(
+            0.99,
+            sum(rate(http_server_requests_seconds_bucket{job="omiicare-backend"}[5m])) by (le)
+          ) > 1
+        for: 5m
+        labels:
+          severity: warning
+          service: omiicare-backend
+        annotations:
+          summary: "High p99 request latency (> 1s)"
+          description: "p99 HTTP request latency is {{ $value | humanizeDuration }} over the last 5 minutes."
+
+  - name: omiicare-jvm
+    rules:
+      # Heap usage above 85% of max for 10 minutes.
+      - alert: JvmHeapPressure
+        expr: |
+          (
+            sum(jvm_memory_used_bytes{job="omiicare-backend", area="heap"})
+            /
+            clamp_min(sum(jvm_memory_max_bytes{job="omiicare-backend", area="heap"}), 1)
+          ) > 0.85
+        for: 10m
+        labels:
+          severity: warning
+          service: omiicare-backend
+        annotations:
+          summary: "JVM heap pressure (> 85% of max)"
+          description: "JVM heap is at {{ $value | humanizePercentage }} of max capacity for over 10 minutes; investigate for leaks or under-provisioning."

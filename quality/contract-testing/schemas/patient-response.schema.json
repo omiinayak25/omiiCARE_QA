@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://omiicare.qa/schemas/patient-response.schema.json",
+  "title": "PatientResponse",
+  "description": "Contract for the omiiCARE Patient API response payload (the `data` field of the ApiResponse envelope). Matches com.omiicare.qa.patient.api.PatientResponse.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "mrn",
+    "firstName",
+    "lastName",
+    "dateOfBirth",
+    "gender",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Server-assigned identity (BIGINT)."
+    },
+    "mrn": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40,
+      "description": "Medical record number, unique per tenant."
+    },
+    "firstName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "lastName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "dateOfBirth": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO-8601 calendar date (yyyy-MM-dd)."
+    },
+    "gender": {
+      "type": "string",
+      "enum": ["MALE", "FEMALE", "OTHER", "UNKNOWN"]
+    },
+    "email": {
+      "type": ["string", "null"],
+      "format": "email",
+      "maxLength": 200
+    },
+    "phone": {
+      "type": ["string", "null"],
+      "maxLength": 40
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ACTIVE", "INACTIVE", "DECEASED", "MERGED"]
+    }
+  }
+}

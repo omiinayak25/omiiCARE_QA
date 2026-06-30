@@ -103,7 +103,7 @@ test implementation.
 **Gate:** RTM, plans, suites, templates, risk/release docs, metrics, KB complete
 and traceable.
 
-### ⬜ Milestone 7 — Advanced Quality Engineering Platform
+### ✅ Milestone 7 — Advanced Quality Engineering Platform
 **Goal:** Performance, security, accessibility, visual, database, contract,
 chaos, resilience, observability, compliance.
 **Deliverables:** JMeter/k6/Gatling performance framework (owned infra only);

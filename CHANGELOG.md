@@ -12,6 +12,42 @@ See [VERSIONING.md](VERSIONING.md) for the versioning policy.
 
 - Changes accumulating toward the next release.
 
+## [0.7.0] - 2026-06-30
+
+Milestone 7 — Advanced Quality Engineering Platform. Reusable frameworks and
+representative suites across ten quality dimensions, integrated with the
+automation platform and monitoring stack. Frameworks + representative suites, not
+thousands of executions; no formal certification claims.
+
+### Added
+
+- **Performance** (`quality/performance/`): runnable k6 load and stress scripts,
+  a JMeter test plan, a Gatling Java simulation, and execution/reporting guides —
+  with the **owned-infrastructure-only** rule stated throughout.
+- **Security** (`quality/security/`): OWASP ZAP baseline config + authenticated-
+  scan guide + runner script, Dependency-Check setup + suppressions, an OWASP
+  Top 10 → omiiCARE mapping, and `SEC-TC-*` cases (JWT tampering, IDOR/cross-tenant,
+  SQLi, headers, CORS, rate limiting).
+- **Accessibility** (`quality/accessibility/`): axe-core Playwright specs,
+  Lighthouse CI config, and WCAG 2.1 AA success-criteria mapping.
+- **Visual** (`quality/visual/`): Playwright visual specs (light/dark), baseline
+  and approval workflow.
+- **Database** (`quality/database-testing/`): referential-integrity and migration-
+  validation SQL plus `DB-TC-*` cases against the real schema.
+- **Contract** (`quality/contract-testing/`): JSON Schemas for the Patient
+  response, the ApiResponse envelope, and the FHIR R4 Patient, with `CT-*` cases.
+- **Chaos & resilience** (`quality/chaos/`, `quality/resilience/`): `CHAOS-*`
+  experiment catalog and `RES-*` resilience patterns (retry/circuit-breaker/timeout).
+- **Observability** (`quality/observability/`): Prometheus alert rules and a
+  Grafana QE dashboard wired into the Milestone 2 stack.
+- **Compliance** (`quality/compliance/`): HIPAA-like, FHIR/HL7, and WCAG/OWASP
+  baseline checklists mapped to implemented controls (RBAC, audit, tenant isolation).
+
+### Verified
+
+- All JSON/YAML/k6-JS/bash artifacts pass syntax checks; no placeholders. Reactor
+  version aligned to 0.7.0.
+
 ## [0.6.0] - 2026-06-30
 
 Milestone 6 — Enterprise Manual Quality Engineering Assets. A complete manual
@@ -216,7 +252,8 @@ no application, API, or automation code by design.
   plus the cross-document consistency baseline.
 - **License:** MIT license with a healthcare-data notice.
 
-[Unreleased]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.3.0...v0.4.0

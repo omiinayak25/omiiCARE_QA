@@ -1,0 +1,30 @@
+{
+  "name": "omiicare-a11y-tests",
+  "version": "1.0.0",
+  "description": "WCAG 2.1 AA accessibility tests for the omiiCARE frontend using axe-core and Lighthouse CI.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test:a11y": "playwright test",
+    "test:a11y:report": "playwright test && playwright show-report",
+    "lighthouse": "lhci autorun --config=./lighthouserc.json",
+    "lighthouse:collect": "lhci collect --config=./lighthouserc.json",
+    "lighthouse:assert": "lhci assert --config=./lighthouserc.json"
+  },
+  "keywords": [
+    "accessibility",
+    "a11y",
+    "wcag",
+    "axe-core",
+    "lighthouse",
+    "playwright",
+    "omiicare"
+  ],
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
+    "@lhci/cli": "^0.14.0",
+    "@playwright/test": "^1.48.0",
+    "axe-core": "^4.10.2"
+  }
+}

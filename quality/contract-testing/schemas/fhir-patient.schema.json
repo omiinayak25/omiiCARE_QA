@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://omiicare.qa/schemas/fhir-patient.schema.json",
+  "title": "FHIR R4 Patient (minimal)",
+  "description": "Minimal contract for the FHIR R4 Patient resource exposed by the omiiCARE Patient facade. Validates the structural invariants the facade must always satisfy; it is intentionally a subset of the full HL7 FHIR R4 Patient profile.",
+  "type": "object",
+  "required": ["resourceType", "identifier", "name", "gender", "birthDate"],
+  "properties": {
+    "resourceType": {
+      "type": "string",
+      "const": "Patient"
+    },
+    "id": {
+      "type": "string",
+      "description": "Logical id of the resource."
+    },
+    "identifier": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Business identifiers; omiiCARE maps the tenant MRN here.",
+      "items": {
+        "type": "object",
+        "required": ["value"],
+        "properties": {
+          "use": {
+            "type": "string",
+            "enum": ["usual", "official", "temp", "secondary", "old"]
+          },
+          "system": {
+            "type": "string",
+            "format": "uri",
+            "description": "Identifier namespace, e.g. the MRN code system URI."
+          },
+          "value": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "name": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "use": {
+            "type": "string",
+            "enum": ["usual", "official", "temp", "nickname", "anonymous", "old", "maiden"]
+          },
+          "family": {
+            "type": "string"
+          },
+          "given": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "gender": {
+      "type": "string",
+      "enum": ["male", "female", "other", "unknown"]
+    },
+    "birthDate": {
+      "type": "string",
+      "pattern": "^[0-9]{4}(-[0-9]{2}(-[0-9]{2})?)?$",
+      "description": "FHIR date: YYYY, YYYY-MM, or YYYY-MM-DD."
+    },
+    "active": {
+      "type": "boolean"
+    },
+    "telecom": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "system": {
+            "type": "string",
+            "enum": ["phone", "fax", "email", "pager", "url", "sms", "other"]
+          },
+          "value": { "type": "string" }
+        }
+      }
+    }
+  }
+}

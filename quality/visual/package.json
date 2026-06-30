@@ -1,0 +1,22 @@
+{
+  "name": "omiicare-visual-tests",
+  "version": "1.0.0",
+  "description": "Visual regression tests for the omiiCARE frontend using Playwright toHaveScreenshot.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test:visual": "playwright test",
+    "update": "playwright test --update-snapshots",
+    "report": "playwright show-report"
+  },
+  "keywords": [
+    "visual-regression",
+    "screenshot",
+    "playwright",
+    "omiicare"
+  ],
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@playwright/test": "^1.48.0"
+  }
+}
