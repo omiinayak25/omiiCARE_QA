@@ -37,10 +37,10 @@ itself. This file is read at the start of every working session.
 | Tagline | Enterprise Healthcare Quality Engineering Platform |
 | Repository name | `omiiCARE_QA` |
 | Repository URL | `https://github.com/omiinayak25/omiiCARE_QA.git` |
-| Current version | `0.2.0` (pre-release; infrastructure foundation) |
+| Current version | `0.3.0` (pre-release; backend core) |
 | Target stable release | `1.0.0` |
 | License | MIT (with healthcare-data notice — see [LICENSE](../LICENSE)) |
-| Status | Active — Milestones 1–2 complete; Milestone 3 (Backend Core) next |
+| Status | Active — Milestones 1–3 complete; Milestone 4 (Frontend) next |
 | Spec version baseline | Master Build Prompt v1.1 (2026-06-30) |
 
 ## 2. Git Configuration

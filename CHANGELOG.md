@@ -12,6 +12,45 @@ See [VERSIONING.md](VERSIONING.md) for the versioning policy.
 
 - Changes accumulating toward the next release.
 
+## [0.3.0] - 2026-06-30
+
+Milestone 3 — Enterprise Healthcare Platform Core (Backend). A working,
+tested backend vertical exercising the full Clean Architecture, authentication,
+and the audit/validation/exception frameworks. No frontend or automation yet.
+
+### Added
+
+- **Shared kernel:** `ApiResponse`/`PageResponse` envelopes, `BaseEntity` (audit
+  timestamps), `TenantContext`, canonical `ErrorCode`s, and a typed exception
+  hierarchy (`ApiException`, `ResourceNotFoundException`, `BusinessRuleException`,
+  `ConflictException`).
+- **Centralized exception framework:** `@RestControllerAdvice` translating every
+  error into an RFC 7807 `ProblemDetail` with error code, correlation id, and
+  per-field validation details — controllers never handle exceptions.
+- **Authentication & RBAC:** JWT access/refresh tokens with rotation
+  (`JwtService`), `SecurityConfig` (stateless, method security), `AppUserPrincipal`
+  exposing roles + permissions, and `/api/v1/auth/{login,refresh,me}` endpoints.
+  Permission-based authorization (`@PreAuthorize`) with no hardcoded role checks.
+- **Audit framework:** `AuditService` recording actions with actor, tenant, and
+  correlation/request ids in its own transaction.
+- **Healthcare modules:** Patient (CRUD + paginated search), Provider (read-only
+  directory), and Appointment (booking with the no-double-booking business rule
+  BR-APPT-001 and validity rules BR-APPT-002/004) — each entity→repository→
+  service→DTO→MapStruct mapper→controller, all tenant-scoped.
+- **FHIR R4 read facade:** `GET /api/v1/fhir/Patient/{id}` mapping the internal
+  model to a FHIR Patient resource (`application/fhir+json`).
+- **Persistence:** Flyway `V2` clinical schema (patient/provider/appointment with
+  FKs, unique keys, indexes) and synthetic PHI-safe clinical seed data.
+- **API documentation:** OpenAPI/Swagger UI with a Bearer-JWT security scheme.
+- **Non-prod bootstrap:** `DataInitializer` granting SUPER_ADMIN its permissions
+  and provisioning the synthetic `demo.admin` login.
+
+### Verified
+
+- `mvn -pl apps/backend test` — 9 tests green: JWT unit tests, the auth→patient→
+  FHIR integration flow, validation Problem Details, and the appointment
+  double-booking rule, plus the M2 boot/schema/seed smoke tests.
+
 ## [0.2.0] - 2026-06-30
 
 Milestone 2 — Enterprise Infrastructure & Environment Foundation. The bootable
@@ -85,6 +124,7 @@ no application, API, or automation code by design.
   plus the cross-document consistency baseline.
 - **License:** MIT license with a healthcare-data notice.
 
-[Unreleased]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/omiinayak25/omiiCARE_QA/releases/tag/v0.1.0

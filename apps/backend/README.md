@@ -1,9 +1,11 @@
 # Backend — Healthcare Platform Core
 
-> **Status:** Planned — delivered in **Milestone 3**.
-> This file is a *module charter*. It documents intent and boundaries so the
-> directory has a clear contract before any code lands. It is intentionally
-> code-free during Milestone 1 (Foundation, Architecture & Governance).
+> **Status:** Delivered (initial vertical) — **Milestone 3**.
+> The bootable shell (profiles, Flyway, observability) landed in Milestone 2; the
+> domain, security, audit/exception frameworks, healthcare modules (Patient,
+> Provider, Appointment), and the FHIR read facade landed in Milestone 3.
+> Test: `mvn -pl apps/backend test`. Run: `mvn -pl apps/backend spring-boot:run`
+> (dev profile, H2). Swagger UI at `/swagger-ui.html`.
 
 ## Purpose
 

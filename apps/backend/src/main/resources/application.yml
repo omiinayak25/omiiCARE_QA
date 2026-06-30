@@ -54,10 +54,18 @@ info:
   application:
     name: omiiCARE_QA
     description: Enterprise Healthcare Quality Engineering Platform
-    version: 0.2.0
+    version: 0.3.0
 
-# Application-specific namespace (read by typed @ConfigurationProperties later).
+# Application-specific namespace (read by typed @ConfigurationProperties).
 omiicare:
   environment: ${SPRING_PROFILES_ACTIVE:dev}
   observability:
     correlation-header: X-Correlation-Id
+  security:
+    jwt:
+      # Dev-safe default (>= 32 bytes for HS256). MUST be overridden via JWT_SECRET
+      # in every real environment — never rely on this value outside dev/test.
+      secret: ${JWT_SECRET:omiicare-qa-development-only-secret-change-me-0123456789}
+      access-token-minutes: ${JWT_ACCESS_TOKEN_MINUTES:15}
+      refresh-token-days: ${JWT_REFRESH_TOKEN_DAYS:7}
+      issuer: omiicare-qa

@@ -53,7 +53,7 @@ business logic.
 **Gate:** Infrastructure starts; all DB profiles work; Flyway + seeds load;
 monitoring up; scripts pass; no duplicated configuration.
 
-### ⬜ Milestone 3 — Enterprise Healthcare Platform Core (Backend)
+### ✅ Milestone 3 — Enterprise Healthcare Platform Core (Backend)
 **Goal:** Backend foundation (Clean Architecture + DDD).
 **Deliverables:** healthcare domain model; multi-tenant architecture;
 event-driven seams (events, Outbox, DLQ — documented); background jobs;

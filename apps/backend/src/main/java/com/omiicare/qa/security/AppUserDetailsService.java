@@ -1,0 +1,28 @@
+package com.omiicare.qa.security;
+
+import com.omiicare.qa.security.domain.UserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/** Loads users for authentication, eagerly resolving roles and permissions. */
+@Service
+public class AppUserDetailsService implements UserDetailsService {
+
+    private final UserRepository userRepository;
+
+    public AppUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(String username) {
+        return userRepository
+                .findByUsername(username)
+                .map(AppUserPrincipal::new)
+                .orElseThrow(() -> new UsernameNotFoundException("Unknown user: " + username));
+    }
+}
