@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  omiiCARE_QA AI-native quality engineering module (Milestone 9).
+  Provider-abstracted (Claude / OpenAI / local), prompt-engine, and AI assistants.
+  Network-free by design: no provider SDK is bundled, so the build and unit tests
+  run offline. Real provider calls require an API key supplied at runtime and are
+  invoked only when AI is explicitly enabled — AI assists, humans decide.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.omiicare.qa</groupId>
+        <artifactId>omiicare-qa-parent</artifactId>
+        <version>0.9.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>omiicare-qa-ai</artifactId>
+    <name>omiiCARE_QA :: AI</name>
+    <description>AI-native quality engineering: provider abstraction, prompt engine, assistants</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.26.3</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

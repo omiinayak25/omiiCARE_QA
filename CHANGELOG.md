@@ -12,6 +12,44 @@ See [VERSIONING.md](VERSIONING.md) for the versioning policy.
 
 - Changes accumulating toward the next release.
 
+## [0.9.0] - 2026-06-30
+
+Milestone 9 — AI-Native Quality Engineering Platform. AI assists engineers and
+never replaces judgement; every capability is optional, transparent, explainable,
+and reviewable, and is disabled by default. No autonomous code modification or
+self-merging.
+
+### Added
+
+- **`ai` Maven module** (added to the reactor): a network-free, vendor-neutral AI
+  platform — the build and tests run offline with no provider SDK bundled.
+- **Provider abstraction:** `AiProvider` with a config-driven `AiProviderFactory`
+  selecting `local` (offline `LocalEchoProvider`), `claude`, or `openai`; hosted
+  providers require a runtime API key and fail fast (no key → no network call).
+- **Configuration:** `AiConfig` (enabled/provider/model/apiKey from system
+  properties or env), disabled by default; defaults to a current Claude model.
+- **Prompt engine:** `PromptTemplate` (`{{variable}}` rendering, fail-fast on
+  missing variables) and `PromptLibrary` (classpath-loaded versioned templates).
+- **Security guardrails:** `PromptGuardrails` detects and redacts secrets/
+  credentials (API keys, JWTs, private keys, bearer tokens) and refuses to send
+  unsafe input to a provider — last line of defense for PHI-safe prompting.
+- **Assistant:** `FailureAnalysisAssistant` (logs/stack trace → probable root
+  cause, evidence, next steps, confidence) that respects the enabled flag and
+  screens input through the guardrails; output is always marked AI-assisted.
+- **Prompt library** (`ai/prompts/`): 14 reusable, reviewable templates
+  (test-case/BDD/API-test generation, bug drafting, RCA, failure analysis, SQL/
+  FHIR payloads, requirement/coverage/regression/risk analysis, code review,
+  documentation) + an index.
+- **Docs:** AI capabilities, configuration, security guardrails, knowledge base,
+  and prompt-evaluation rubric under `ai/documentation/`, `ai/knowledge/`,
+  `ai/evaluation/`.
+
+### Verified
+
+- `mvn -pl ai test` — 9 unit tests green (prompt rendering, provider selection,
+  guardrails, assistant enabled/disabled/secret-refusal). Full reactor (backend +
+  automation + ai) builds. Reactor version 0.9.0.
+
 ## [0.8.0] - 2026-06-30
 
 Milestone 8 — Enterprise DevOps, CI/CD & Release Engineering. A reusable,
@@ -282,7 +320,8 @@ no application, API, or automation code by design.
   plus the cross-document consistency baseline.
 - **License:** MIT license with a healthcare-data notice.
 
-[Unreleased]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.5.0...v0.6.0

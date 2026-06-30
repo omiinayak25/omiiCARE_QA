@@ -1,0 +1,16 @@
+Analyze the following automated test failure for the omiiCARE_QA healthcare QA platform.
+
+Test: {{testName}}
+
+Logs / stack trace:
+{{logs}}
+
+Respond with:
+1. Probable root cause (one paragraph).
+2. Supporting evidence (cite specific log lines).
+3. Suggested next steps (ordered).
+4. Confidence level (low | medium | high) with a one-line justification.
+
+Rules: be factual; do not fabricate; if the evidence is insufficient, say so and
+state what additional data is needed. This output is AI-assisted and must be
+reviewed by an engineer before any action is taken.

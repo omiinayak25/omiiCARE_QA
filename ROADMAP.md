@@ -126,7 +126,7 @@ promotion; deployment docs; badges.
 **Gate:** Reusable workflows + quality gates operational; coverage + SonarQube +
 Docker builds + release automation prepared.
 
-### ⬜ Milestone 9 — AI-Native Quality Engineering Platform
+### ✅ Milestone 9 — AI-Native Quality Engineering Platform
 **Goal:** AI-first QA — optional, transparent, explainable, reviewable.
 **Deliverables:** provider abstraction (Claude/OpenAI/local); prompt library;
 AI capabilities (requirement analysis, test generation, failure analysis,

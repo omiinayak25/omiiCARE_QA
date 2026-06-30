@@ -2,7 +2,7 @@
 
 [![Build](https://img.shields.io/badge/build-passing-brightgreen?style=flat-square)](.github/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.8.0-orange?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.9.0-orange?style=flat-square)](CHANGELOG.md)
 [![Java](https://img.shields.io/badge/Java-21-007396?style=flat-square&logo=openjdk&logoColor=white)](pom.xml)
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black)](apps/frontend/package.json)
 [![Docs](https://img.shields.io/badge/docs-passing-brightgreen?style=flat-square)](docs/)
