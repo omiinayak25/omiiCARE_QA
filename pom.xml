@@ -19,7 +19,7 @@
 
     <groupId>com.omiicare.qa</groupId>
     <artifactId>omiicare-qa-parent</artifactId>
-    <version>0.5.0</version>
+    <version>0.6.0</version>
     <packaging>pom</packaging>
 
     <name>omiiCARE_QA</name>

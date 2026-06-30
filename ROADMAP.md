@@ -91,7 +91,7 @@ libraries; Allure/Extent reporting; centralized logging; flexible execution.
 **Gate:** All frameworks + adapter architecture + reporting + environment
 switching operational.
 
-### ⬜ Milestone 6 — Enterprise Manual Quality Engineering Assets
+### ✅ Milestone 6 — Enterprise Manual Quality Engineering Assets
 **Goal:** A complete manual-testing repository another QA team could execute a
 release from.
 **Deliverables:** requirements + RTM; test pyramid; master/sprint/release plans;

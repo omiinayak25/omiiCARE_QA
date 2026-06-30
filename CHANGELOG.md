@@ -12,6 +12,39 @@ See [VERSIONING.md](VERSIONING.md) for the versioning policy.
 
 - Changes accumulating toward the next release.
 
+## [0.6.0] - 2026-06-30
+
+Milestone 6 — Enterprise Manual Quality Engineering Assets. A complete manual
+testing repository (~46 documents) traceable to requirements and the implemented
+features. No performance/security/accessibility/visual automation (Milestone 7).
+
+### Added
+
+- **Requirements & traceability:** enumerated `REQUIREMENTS.md` (BR/FR/NFR/SEC/
+  A11Y/PERF/FHIR/HL7 with IDs and acceptance criteria) and a populated `RTM.md`
+  mapping requirements to manual TC IDs, automated suites, and specialized tests.
+- **Test planning:** executable manual test strategy plus Master, Sprint, and
+  Release test plans, and a Test-Case-Point + PERT estimation model.
+- **Test cases & suites:** ~62 executable cases across Authentication, Patient,
+  Appointment, FHIR, and Admin/Audit (positive, negative, boundary), grouped into
+  Smoke, Regression, Negative/Boundary, and Exploratory (charter-based) suites,
+  plus UI and API functional checklists.
+- **Defect management:** report template, severity/priority matrix, defect
+  lifecycle, RCA taxonomy, realistic sample defects, and a triage guide.
+- **Risk & release:** risk register + matrix; release, go-live, rollback,
+  deployment-validation, and production-verification checklists; UAT plan; QA
+  sign-off template.
+- **Metrics, data & knowledge:** QA metrics catalog + execution report/log
+  templates; synthetic PHI-safe test-data catalog + boundary datasets; healthcare
+  QA guide, glossary, common-failure patterns, best practices, lessons learned;
+  and a QA onboarding guide.
+
+### Verified
+
+- All manual-testing documents carry Version History rows and contain no
+  placeholders; test-case IDs are consistent for RTM linkage. Reactor version
+  aligned to 0.6.0.
+
 ## [0.5.0] - 2026-06-30
 
 Milestone 5 — Enterprise Quality Engineering Platform (Automation). A modular,
@@ -183,7 +216,8 @@ no application, API, or automation code by design.
   plus the cross-document consistency baseline.
 - **License:** MIT license with a healthcare-data notice.
 
-[Unreleased]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.2.0...v0.3.0
