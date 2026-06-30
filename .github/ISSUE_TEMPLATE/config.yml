@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discussions
+    url: https://github.com/omiinayak25/omiiCARE_QA/discussions
+    about: Ask questions, share ideas, or discuss architecture and roadmap before opening an issue.
+  - name: 🔒 Security Policy
+    url: https://github.com/omiinayak25/omiiCARE_QA/security/policy
+    about: Report a security vulnerability privately. Do NOT open a public issue for security reports.
+  - name: 📖 Documentation
+    url: https://github.com/omiinayak25/omiiCARE_QA/tree/main/docs
+    about: Browse governance docs, architecture, ADRs, and guides before filing.

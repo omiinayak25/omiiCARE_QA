@@ -1,0 +1,57 @@
+# CODEOWNERS — omiiCARE_QA
+# -----------------------------------------------------------------------------
+# This file declares who is automatically requested for review when matching
+# paths change. GitHub reads it (root, .github/, or docs/ location) and assigns
+# the listed owners as required reviewers on pull requests.
+#
+# Syntax: <path-pattern>  <owner> [<owner> ...]
+# - Later, more specific matches override earlier, broader ones.
+# - Owners are GitHub usernames/teams prefixed with '@'.
+#
+# omiiCARE_QA is currently a SINGLE-MAINTAINER repository, so every path is owned
+# by @omiinayak25. The per-module lines below are intentional: they mark the
+# seams where dedicated team handles (e.g. @omiinayak25/backend-team) will take
+# over ownership as the project grows. Until then, all roads lead to the
+# maintainer. See CONTRIBUTING.md for the review process.
+# -----------------------------------------------------------------------------
+
+# Default owner for everything in the repository
+*                       @omiinayak25
+
+# Documentation & governance (future: @omiinayak25/docs-team)
+/docs/                  @omiinayak25
+/README.md              @omiinayak25
+/CONTRIBUTING.md        @omiinayak25
+/CODE_OF_CONDUCT.md     @omiinayak25
+/SECURITY.md            @omiinayak25
+/VERSIONING.md          @omiinayak25
+/CHANGELOG.md           @omiinayak25
+/ARCHITECTURE.md        @omiinayak25
+/ROADMAP.md             @omiinayak25
+
+# Backend platform — Java 21 / Spring Boot (future: @omiinayak25/backend-team)
+/apps/backend/          @omiinayak25
+
+# Frontend platform — React / TypeScript / Vite (future: @omiinayak25/frontend-team)
+/apps/frontend/         @omiinayak25
+
+# Automation platform — Playwright / Selenium / Rest Assured / Cucumber (future: @omiinayak25/automation-team)
+/automation/            @omiinayak25
+
+# Database — Flyway migrations / schema / PHI-safe seeds (future: @omiinayak25/data-team)
+/database/              @omiinayak25
+
+# Infrastructure & DevOps — Docker Compose / monitoring (future: @omiinayak25/platform-team)
+/infrastructure/        @omiinayak25
+
+# Manual testing assets — requirements / RTM / cases (future: @omiinayak25/qa-team)
+/manual-testing/        @omiinayak25
+
+# Advanced quality — performance / security / a11y / visual (future: @omiinayak25/qe-team)
+/quality/               @omiinayak25
+
+# AI-native quality engineering — provider-abstracted assistants (future: @omiinayak25/ai-team)
+/ai/                    @omiinayak25
+
+# Repository & CI/CD configuration — GitHub Actions / templates (future: @omiinayak25/platform-team)
+/.github/               @omiinayak25

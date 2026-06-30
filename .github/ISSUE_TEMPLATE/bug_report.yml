@@ -1,0 +1,118 @@
+name: 🐞 Bug Report
+description: Report a defect in omiiCARE_QA so it can be triaged and fixed.
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug. Please provide enough detail to reproduce it.
+        Use only **synthetic, PHI-safe data** — never include real patient data.
+        For security vulnerabilities, use the Security Policy instead of this form.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of the defect.
+      placeholder: When I do X, Y happens instead of Z.
+    validations:
+      required: true
+  - type: dropdown
+    id: module
+    attributes:
+      label: Affected module
+      description: Which part of the monorepo is affected?
+      options:
+        - apps/backend
+        - apps/frontend
+        - database
+        - infrastructure
+        - automation
+        - manual-testing
+        - quality
+        - ai
+        - docs
+        - .github (CI/templates)
+        - Unknown / other
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How serious is the impact?
+      options:
+        - Critical — blocks work / data loss / security
+        - High — major function broken, no workaround
+        - Medium — function impaired, workaround exists
+        - Low — minor / cosmetic
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Spring profile / OS / browser / tool versions (e.g. profile=docker, PostgreSQL, Chrome 126, Java 21).
+      placeholder: profile=dev (H2), Ubuntu 24.04, Firefox 127
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Numbered steps to reliably reproduce the bug.
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Result
+      description: What you expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Result
+      description: What actually happened (include error messages).
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Logs, stack traces, screenshots, or test reports (Allure/Extent). Drag and drop files here.
+    validations:
+      required: false
+  - type: dropdown
+    id: milestone
+    attributes:
+      label: Milestone
+      description: Which roadmap milestone does this relate to?
+      options:
+        - M1 — Foundation, Architecture & Governance
+        - M2 — Infrastructure & Environment Foundation
+        - M3 — Healthcare Platform Core (Backend)
+        - M4 — Frontend Platform & Portals
+        - M5 — Quality Engineering Platform (Automation)
+        - M6 — Manual Quality Engineering Assets
+        - M7 — Advanced Quality Engineering
+        - M8 — DevOps, CI/CD & Release Engineering
+        - M9 — AI-Native Quality Engineering
+        - M10 — Production Hardening & Release 1.0.0
+        - Unknown
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: I searched existing issues and this is not a duplicate.
+          required: true
+        - label: I used only synthetic, PHI-safe data in this report.
+          required: true

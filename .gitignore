@@ -1,0 +1,86 @@
+# ---------------------------------------------------------------------------
+# omiiCARE_QA — Repository ignore rules
+# Organized by toolchain. Keep alphabetized within each section.
+# ---------------------------------------------------------------------------
+
+# --- Secrets & local environment (NEVER commit) ---
+.env
+.env.*
+!.env.example
+*.local
+secrets/
+*.pem
+*.key
+*.p12
+*.keystore
+*.jks
+
+# --- Java / Maven ---
+target/
+*.class
+*.jar
+*.war
+*.ear
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/timing.properties
+dependency-reduced-pom.xml
+hs_err_pid*
+
+# --- Node / Frontend ---
+node_modules/
+dist/
+dist-ssr/
+.vite/
+coverage/
+*.tsbuildinfo
+.npm/
+.eslintcache
+.pnpm-store/
+
+# --- Test & QA artifacts ---
+allure-results/
+allure-report/
+test-results/
+playwright-report/
+playwright/.cache/
+extent-reports/
+**/screenshots/**/*.png
+!**/baselines/**/*.png
+*.har
+*.trace.zip
+
+# --- Build & coverage reports ---
+build/
+out/
+*.exec
+jacoco.exec
+reports/
+.sonar/
+.scannerwork/
+
+# --- Docker / infra runtime ---
+**/data/
+**/.docker-data/
+*.pid
+
+# --- IDE / editor ---
+.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
+.settings/
+.project
+.classpath
+*.swp
+*~
+
+# --- OS noise ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Logs ---
+logs/
+*.log
+npm-debug.log*

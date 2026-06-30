@@ -1,0 +1,143 @@
+name: 🧪 Test Case
+description: Propose a manual or automated test case for omiiCARE_QA.
+title: "[Test]: "
+labels: ["test-case"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form to propose a test case (manual or automated). Trace it to a
+        requirement where possible (RTM). Use only synthetic, PHI-safe data.
+  - type: input
+    id: title
+    attributes:
+      label: Test Case Title
+      description: A concise, descriptive name for the test case.
+      placeholder: Verify patient registration rejects a future date of birth
+    validations:
+      required: true
+  - type: dropdown
+    id: module
+    attributes:
+      label: Module
+      description: Which module / feature area does this test cover?
+      options:
+        - apps/backend
+        - apps/frontend
+        - database
+        - infrastructure
+        - automation
+        - manual-testing
+        - quality
+        - ai
+        - Cross-cutting
+    validations:
+      required: true
+  - type: input
+    id: requirement
+    attributes:
+      label: Requirement Reference
+      description: Requirement ID / RTM reference / user story this test verifies.
+      placeholder: REQ-PAT-012 / Story #123
+    validations:
+      required: false
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - P0 — Critical path / smoke
+        - P1 — High
+        - P2 — Medium
+        - P3 — Low
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity (of the area under test)
+      options:
+        - Critical
+        - High
+        - Medium
+        - Low
+    validations:
+      required: true
+  - type: dropdown
+    id: test_type
+    attributes:
+      label: Test Type
+      options:
+        - Functional
+        - Smoke
+        - Sanity
+        - Regression
+        - Negative
+        - Boundary
+        - Integration
+        - API
+        - UI / End-to-end
+        - Performance
+        - Security
+        - Accessibility
+        - Visual
+        - Contract / FHIR validation
+    validations:
+      required: true
+  - type: textarea
+    id: preconditions
+    attributes:
+      label: Preconditions
+      description: State, data, and configuration required before execution.
+      placeholder: User is logged in as Doctor; profile=dev; seed dataset loaded.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Test Steps
+      description: Numbered steps to execute.
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Result
+      description: The expected outcome that determines pass/fail.
+    validations:
+      required: true
+  - type: dropdown
+    id: automation_status
+    attributes:
+      label: Automation Status
+      options:
+        - Manual only
+        - Candidate for automation
+        - Automation in progress
+        - Automated
+    validations:
+      required: true
+  - type: dropdown
+    id: milestone
+    attributes:
+      label: Milestone
+      options:
+        - M5 — Quality Engineering Platform (Automation)
+        - M6 — Manual Quality Engineering Assets
+        - M7 — Advanced Quality Engineering
+        - Other
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: I searched existing issues and this test case is not a duplicate.
+          required: true
+        - label: This test uses only synthetic, PHI-safe data.
+          required: true

@@ -1,0 +1,52 @@
+# ---------------------------------------------------------------------------
+# omiiCARE_QA — Git attributes
+# Enforce consistent line endings and correct diff/merge behavior across OSes.
+# ---------------------------------------------------------------------------
+
+# Default: normalize to LF in the repo, auto-convert on checkout.
+* text=auto eol=lf
+
+# --- Explicitly text ---
+*.java       text eol=lf
+*.kt         text eol=lf
+*.ts         text eol=lf
+*.tsx        text eol=lf
+*.js         text eol=lf
+*.jsx        text eol=lf
+*.json       text eol=lf
+*.yml        text eol=lf
+*.yaml       text eol=lf
+*.xml        text eol=lf
+*.sql        text eol=lf
+*.md         text eol=lf
+*.html       text eol=lf
+*.css        text eol=lf
+*.properties text eol=lf
+*.feature    text eol=lf
+
+# --- Windows scripts must keep CRLF ---
+*.bat        text eol=crlf
+*.cmd        text eol=crlf
+
+# --- Shell scripts must keep LF ---
+*.sh         text eol=lf
+
+# --- Binary (never diff/merge as text) ---
+*.png        binary
+*.jpg        binary
+*.jpeg       binary
+*.gif        binary
+*.ico        binary
+*.pdf        binary
+*.zip        binary
+*.jar        binary
+*.woff       binary
+*.woff2      binary
+*.ttf        binary
+*.mp4        binary
+*.webm       binary
+
+# --- Linguist / GitHub language stats ---
+docs/**            linguist-documentation
+manual-testing/**  linguist-documentation
+*.md               linguist-detectable=true

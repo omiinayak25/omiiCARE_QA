@@ -1,0 +1,94 @@
+name: 🔧 Chore / Tech Debt
+description: Propose maintenance, tooling, refactoring, or technical-debt work.
+title: "[Chore]: "
+labels: ["chore"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form for non-feature, non-bug work: build/tooling, dependency
+        updates, refactors, configuration, or paying down technical debt.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What needs to be done and why?
+    validations:
+      required: true
+  - type: dropdown
+    id: chore_type
+    attributes:
+      label: Chore Type
+      options:
+        - Build / tooling
+        - Dependency update
+        - Refactor
+        - Configuration
+        - Technical debt
+        - CI/CD maintenance
+        - Cleanup (dead code / formatting)
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: module
+    attributes:
+      label: Affected module
+      options:
+        - apps/backend
+        - apps/frontend
+        - database
+        - infrastructure
+        - automation
+        - manual-testing
+        - quality
+        - ai
+        - docs
+        - .github (CI/templates)
+        - Repository-wide
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation / Impact
+      description: What value or risk reduction does this deliver? What happens if it is not done?
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: How will we know this chore is complete?
+      value: |
+        - [ ]
+        - [ ]
+    validations:
+      required: false
+  - type: dropdown
+    id: milestone
+    attributes:
+      label: Milestone
+      options:
+        - M1 — Foundation, Architecture & Governance
+        - M2 — Infrastructure & Environment Foundation
+        - M3 — Healthcare Platform Core (Backend)
+        - M4 — Frontend Platform & Portals
+        - M5 — Quality Engineering Platform (Automation)
+        - M6 — Manual Quality Engineering Assets
+        - M7 — Advanced Quality Engineering
+        - M8 — DevOps, CI/CD & Release Engineering
+        - M9 — AI-Native Quality Engineering
+        - M10 — Production Hardening & Release 1.0.0
+        - Not milestone-specific
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: I searched existing issues and this is not a duplicate.
+          required: true
+        - label: This work respects the active milestone's fence (ROADMAP.md).
+          required: false

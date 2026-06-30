@@ -1,0 +1,92 @@
+name: ✨ Feature Request
+description: Propose a new feature or enhancement for omiiCARE_QA.
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the proposal. Features must fit the active milestone's scope and
+        respect its fence (see ROADMAP.md). Significant architectural choices may
+        require an ADR.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / Motivation
+      description: What problem does this solve? Who benefits and why does it matter?
+      placeholder: As a <role>, I need <capability> so that <outcome>.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the proposed feature or change.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Other approaches you weighed and why they were rejected.
+    validations:
+      required: false
+  - type: dropdown
+    id: module
+    attributes:
+      label: Target module
+      options:
+        - apps/backend
+        - apps/frontend
+        - database
+        - infrastructure
+        - automation
+        - manual-testing
+        - quality
+        - ai
+        - docs
+        - .github (CI/templates)
+        - Cross-cutting
+    validations:
+      required: true
+  - type: dropdown
+    id: milestone
+    attributes:
+      label: Milestone
+      description: Which roadmap milestone should deliver this?
+      options:
+        - M1 — Foundation, Architecture & Governance
+        - M2 — Infrastructure & Environment Foundation
+        - M3 — Healthcare Platform Core (Backend)
+        - M4 — Frontend Platform & Portals
+        - M5 — Quality Engineering Platform (Automation)
+        - M6 — Manual Quality Engineering Assets
+        - M7 — Advanced Quality Engineering
+        - M8 — DevOps, CI/CD & Release Engineering
+        - M9 — AI-Native Quality Engineering
+        - M10 — Production Hardening & Release 1.0.0
+        - Post-1.0 (roadmap-only)
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: Testable conditions that define "done" for this feature.
+      value: |
+        - [ ]
+        - [ ]
+        - [ ]
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: I searched existing issues and this is not a duplicate.
+          required: true
+        - label: This proposal respects the active milestone's fence (ROADMAP.md).
+          required: true
+        - label: I considered whether this needs an ADR.
+          required: false

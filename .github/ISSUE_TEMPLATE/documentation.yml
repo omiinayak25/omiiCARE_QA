@@ -1,0 +1,85 @@
+name: 📖 Documentation
+description: Report a documentation problem or propose a documentation change.
+title: "[Docs]: "
+labels: ["documentation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Documentation is the source of truth in omiiCARE_QA. Use this form for
+        corrections, gaps, or improvements to any governance doc, guide, ADR, or README.
+  - type: dropdown
+    id: doc_type
+    attributes:
+      label: Documentation Type
+      options:
+        - Root governance doc (README, ARCHITECTURE, ROADMAP, etc.)
+        - docs/ guide or blueprint
+        - ADR (docs/architecture/adr)
+        - Module README / charter
+        - GitHub templates / CONTRIBUTING
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: location
+    attributes:
+      label: Document / Path
+      description: The file or section affected.
+      placeholder: docs/architecture/adr/0002-hybrid-database-h2-postgresql.md
+    validations:
+      required: true
+  - type: dropdown
+    id: change_type
+    attributes:
+      label: Change Type
+      options:
+        - Correction (factual error)
+        - Clarification (confusing or ambiguous)
+        - Missing content (gap)
+        - Outdated (no longer matches reality)
+        - New document needed
+        - Formatting / consistency
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What is wrong or missing, and what should it say instead?
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested Wording (optional)
+      description: Proposed text or outline for the change.
+    validations:
+      required: false
+  - type: dropdown
+    id: milestone
+    attributes:
+      label: Milestone
+      options:
+        - M1 — Foundation, Architecture & Governance
+        - M2 — Infrastructure & Environment Foundation
+        - M3 — Healthcare Platform Core (Backend)
+        - M4 — Frontend Platform & Portals
+        - M5 — Quality Engineering Platform (Automation)
+        - M6 — Manual Quality Engineering Assets
+        - M7 — Advanced Quality Engineering
+        - M8 — DevOps, CI/CD & Release Engineering
+        - M9 — AI-Native Quality Engineering
+        - M10 — Production Hardening & Release 1.0.0
+        - Not milestone-specific
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: I searched existing issues and this is not a duplicate.
+          required: true
+        - label: This change keeps documents consistent with PROJECT_METADATA.md (canonical facts).
+          required: false
