@@ -28,7 +28,7 @@ this is the strategic plan.
 
 ## Milestone Plan (path to 1.0.0)
 
-### 🟦 Milestone 1 — Foundation, Architecture & Governance
+### ✅ Milestone 1 — Foundation, Architecture & Governance
 **Goal:** Establish the complete architecture and governance baseline.
 **Deliverables:** enterprise architecture; monorepo structure; all root and
 `docs/` documentation; ADR structure; GitHub/issue/PR templates; `CODEOWNERS`;
@@ -38,7 +38,7 @@ workflows; repository standards; cross-document consistency review.
 **Gate:** Every governance document exists, is internally consistent, and is
 free of placeholders/TODOs.
 
-### ⬜ Milestone 2 — Enterprise Infrastructure & Environment Foundation
+### ✅ Milestone 2 — Enterprise Infrastructure & Environment Foundation
 **Goal:** The technical foundation every module reuses.
 **Deliverables:** environments (dev/test/local/docker/qa/stage/prod) + matrix &
 feature flags; profile-driven hybrid DB (H2 ↔ PostgreSQL); Spring profile files;

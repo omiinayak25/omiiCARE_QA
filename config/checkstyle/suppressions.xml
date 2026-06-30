@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suppressions PUBLIC
+    "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+    "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+
+<!--
+  omiiCARE_QA Checkstyle suppressions.
+  Consumed by: checkstyle.xml -> SuppressionFilter.
+  Goal: keep generated and test code out of strict style gates while
+  still enforcing standards on production source.
+-->
+<suppressions>
+
+  <!-- Generated sources (Maven build output, MapStruct, OpenAPI, protobuf, etc.) -->
+  <suppress files="[/\\]target[/\\]" checks=".*"/>
+  <suppress files="[/\\]generated[/\\]" checks=".*"/>
+  <suppress files="[/\\]generated-sources[/\\]" checks=".*"/>
+  <suppress files=".*MapperImpl\.java$" checks=".*"/>
+  <suppress files=".*[/\\]openapi[/\\].*" checks=".*"/>
+
+  <!-- Test sources: relax Javadoc and magic-number style concerns -->
+  <suppress files="[/\\]src[/\\]test[/\\]" checks="JavadocType"/>
+  <suppress files="[/\\]src[/\\]test[/\\]" checks="MissingJavadocType"/>
+  <suppress files="[/\\]src[/\\]test[/\\]" checks="JavadocMethod"/>
+  <suppress files="[/\\]src[/\\]test[/\\]" checks="MagicNumber"/>
+  <suppress files="[/\\]src[/\\]test[/\\]" checks="LineLength"/>
+
+  <!-- Package-info / module-info files: no member-style checks -->
+  <suppress files="package-info\.java$" checks="JavadocMethod"/>
+  <suppress files="module-info\.java$" checks=".*"/>
+
+</suppressions>

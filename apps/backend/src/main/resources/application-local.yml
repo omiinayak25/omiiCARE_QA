@@ -1,0 +1,22 @@
+# =============================================================================
+# LOCAL profile — enterprise local development against PostgreSQL (Docker Compose).
+# Database selection is profile-driven: local => PostgreSQL.
+# Credentials default to the Docker Compose dev values and are overridable via env.
+# =============================================================================
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:omiicare}
+    username: ${DB_USERNAME:omiicare}
+    password: ${DB_PASSWORD:omiicare}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      pool-name: omiicare-local-pool
+      maximum-pool-size: 10
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    locations: classpath:db/migration,classpath:db/seed
+
+logging:
+  level:
+    com.omiicare.qa: DEBUG

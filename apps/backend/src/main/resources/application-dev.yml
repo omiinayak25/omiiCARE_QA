@@ -1,0 +1,24 @@
+# =============================================================================
+# DEVELOPMENT profile — embedded H2. Zero installation, instant startup.
+# Database selection is profile-driven: dev => H2 (this file).
+# =============================================================================
+spring:
+  datasource:
+    url: jdbc:h2:mem:omiicare;DB_CLOSE_DELAY=-1;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  flyway:
+    # H2 runs in PostgreSQL compatibility mode; shared migrations apply.
+    locations: classpath:db/migration,classpath:db/seed
+
+logging:
+  level:
+    com.omiicare.qa: DEBUG
+    org.flywaydb: INFO

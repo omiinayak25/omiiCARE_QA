@@ -1,0 +1,63 @@
+# =============================================================================
+# omiiCARE_QA backend — COMMON configuration (all profiles inherit this).
+# Profile-specific overrides live in application-<profile>.yml.
+# Nothing secret is committed here; secrets come from environment variables.
+# The active profile is selected via SPRING_PROFILES_ACTIVE (default: dev).
+# =============================================================================
+spring:
+  application:
+    name: omiicare-qa-backend
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate        # schema is owned by Flyway, never by Hibernate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+    # Repeatable migrations and seeds are layered per profile.
+
+# --- Actuator / health / metrics (observability foundation) ---
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+      probes:
+        enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  tracing:
+    sampling:
+      probability: 1.0          # full sampling in non-prod; tuned per profile
+
+# --- OpenAPI / Swagger UI ---
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+info:
+  application:
+    name: omiiCARE_QA
+    description: Enterprise Healthcare Quality Engineering Platform
+    version: 0.2.0
+
+# Application-specific namespace (read by typed @ConfigurationProperties later).
+omiicare:
+  environment: ${SPRING_PROFILES_ACTIVE:dev}
+  observability:
+    correlation-header: X-Correlation-Id

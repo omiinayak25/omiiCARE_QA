@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="omiiCARE_QA PMD Ruleset"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0
+                             https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+
+  <description>
+    Enterprise PMD 7 ruleset for omiiCARE_QA backend (Java 21).
+    Consumed by: maven-pmd-plugin (rulesets/configuration).
+    Run locally: mvn -pl apps/backend pmd:check
+  </description>
+
+  <!-- Exclude generated and build output from analysis -->
+  <exclude-pattern>.*/target/.*</exclude-pattern>
+  <exclude-pattern>.*/generated/.*</exclude-pattern>
+  <exclude-pattern>.*/generated-sources/.*</exclude-pattern>
+  <exclude-pattern>.*MapperImpl.*</exclude-pattern>
+
+  <!-- ============ Best Practices ============ -->
+  <rule ref="category/java/bestpractices.xml">
+    <!-- JUnit assertion granularity is noisy and low value -->
+    <exclude name="JUnitAssertionsShouldIncludeMessage"/>
+    <exclude name="JUnitTestContainsTooManyAsserts"/>
+    <!-- Lombok / framework patterns frequently trip these -->
+    <exclude name="GuardLogStatement"/>
+  </rule>
+
+  <!-- ============ Code Style ============ -->
+  <rule ref="category/java/codestyle.xml">
+    <!-- Overlaps Checkstyle / opinionated; let Checkstyle own these -->
+    <exclude name="OnlyOneReturn"/>
+    <exclude name="AtLeastOneConstructor"/>
+    <exclude name="LocalVariableCouldBeFinal"/>
+    <exclude name="MethodArgumentCouldBeFinal"/>
+    <exclude name="ShortClassName"/>
+    <exclude name="ShortVariable"/>
+    <exclude name="LongVariable"/>
+    <exclude name="CommentDefaultAccessModifier"/>
+  </rule>
+
+  <!-- ============ Design ============ -->
+  <rule ref="category/java/design.xml">
+    <exclude name="LawOfDemeter"/>
+    <exclude name="LoosePackageCoupling"/>
+    <exclude name="DataClass"/>
+  </rule>
+  <!-- Tune cyclomatic complexity to a pragmatic threshold -->
+  <rule ref="category/java/design.xml/CyclomaticComplexity">
+    <properties>
+      <property name="classReportLevel" value="80"/>
+      <property name="methodReportLevel" value="15"/>
+    </properties>
+  </rule>
+  <rule ref="category/java/design.xml/TooManyMethods">
+    <properties>
+      <property name="maxmethods" value="25"/>
+    </properties>
+  </rule>
+
+  <!-- ============ Error Prone ============ -->
+  <rule ref="category/java/errorprone.xml">
+    <!-- Spring/JPA beans legitimately need no-arg construction patterns -->
+    <exclude name="BeanMembersShouldSerialize"/>
+    <exclude name="DataflowAnomalyAnalysis"/>
+    <!-- Allow guarded null assignment patterns -->
+    <exclude name="NullAssignment"/>
+  </rule>
+
+  <!-- ============ Performance ============ -->
+  <rule ref="category/java/performance.xml">
+    <exclude name="AvoidInstantiatingObjectsInLoops"/>
+  </rule>
+
+</ruleset>

@@ -1,0 +1,42 @@
+# omiiCARE_QA pre-commit hooks
+# Install:  pip install pre-commit && pre-commit install
+# Run all:  pre-commit run --all-files
+# Manual-stage hooks (e.g. spotless) run via: pre-commit run --hook-stage manual
+---
+minimum_pre_commit_version: "3.5.0"
+default_install_hook_types:
+  - pre-commit
+  - commit-msg
+
+repos:
+  # ---- Hygiene: whitespace, EOF, syntax, secrets ----
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        args: ["--allow-multiple-documents"]
+      - id: check-json
+      - id: check-merge-conflict
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+      - id: detect-private-key
+
+  # ---- Secret scanning ----
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.4
+    hooks:
+      - id: gitleaks
+
+  # ---- Backend formatting (Spotless) ----
+  # Manual stage: Maven is slow for every commit; run on demand / in CI.
+  - repo: local
+    hooks:
+      - id: spotless-check
+        name: Spotless (backend) check
+        entry: mvn -q -pl apps/backend spotless:check
+        language: system
+        files: ^apps/backend/.*\.java$
+        pass_filenames: false
+        stages: [manual]

@@ -1,0 +1,22 @@
+{
+  "mappings": [
+    {
+      "name": "external-insurance-health-up",
+      "request": {
+        "method": "GET",
+        "urlPath": "/external/insurance/health"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "status": "UP",
+          "service": "insurance-eligibility",
+          "timestamp": "{{now offset='0 seconds'}}"
+        }
+      }
+    }
+  ]
+}

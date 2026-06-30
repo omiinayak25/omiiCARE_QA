@@ -1,0 +1,41 @@
+# =============================================================================
+# PRODUCTION profile — external managed PostgreSQL (Azure / RDS / Cloud SQL /
+# Supabase / Neon / self-hosted). Secure defaults; minimal exposure; all
+# credentials and URLs injected from the environment / secret manager.
+# =============================================================================
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT:5432}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      pool-name: omiicare-prod-pool
+      maximum-pool-size: ${DB_POOL_SIZE:30}
+      minimum-idle: 5
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    locations: classpath:db/migration   # migrations only; never synthetic seeds
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      show-details: never
+  tracing:
+    sampling:
+      probability: 0.1
+
+server:
+  error:
+    include-message: never
+    include-stacktrace: never
+
+logging:
+  level:
+    com.omiicare.qa: INFO
+    root: WARN

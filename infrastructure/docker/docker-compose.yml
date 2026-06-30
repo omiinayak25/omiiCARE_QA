@@ -1,0 +1,383 @@
+# =============================================================================
+# omiiCARE — Local Development & QA Infrastructure Stack
+# -----------------------------------------------------------------------------
+# Milestone 2: infrastructure foundation. Brings up the supporting services the
+# Spring Boot backend (profile `docker`) and the QA platform depend on.
+#
+# Usage:
+#   cp .env.example .env          # then edit secrets as needed
+#   docker compose up -d          # start the full stack
+#   docker compose ps             # check health
+#   docker compose down           # stop (add -v to drop volumes)
+#
+# NOTE: Docker (Engine + Compose v2) is REQUIRED to run this stack.
+# All services share the `omiicare-net` bridge network so they can resolve
+# each other by service name (e.g. the backend reaches Postgres at `postgres`).
+# =============================================================================
+
+name: omiicare
+
+# --- Reusable anchors --------------------------------------------------------
+x-restart: &restart-policy unless-stopped
+
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+
+  # ---------------------------------------------------------------------------
+  # PostgreSQL — primary relational datastore for the backend.
+  # ---------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: omiicare-postgres
+    restart: *restart-policy
+    logging: *default-logging
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-omiicare}
+      POSTGRES_USER: ${POSTGRES_USER:-omiicare}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-omiicare}
+      # Tunables; keep memory modest for laptops.
+      POSTGRES_INITDB_ARGS: "--data-checksums"
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-omiicare} -d ${POSTGRES_DB:-omiicare}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - omiicare-net
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+  # ---------------------------------------------------------------------------
+  # Redis — caching / session / rate-limit store.
+  # ---------------------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: omiicare-redis
+    restart: *restart-policy
+    logging: *default-logging
+    command: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - omiicare-net
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  # ---------------------------------------------------------------------------
+  # Mailpit — local SMTP sink + web UI for inspecting outbound mail.
+  # SMTP on 1025, web UI on 8025 (MailHog-compatible ports).
+  # ---------------------------------------------------------------------------
+  mailhog:
+    image: axllent/mailpit:latest
+    container_name: omiicare-mailhog
+    restart: *restart-policy
+    logging: *default-logging
+    environment:
+      MP_SMTP_AUTH_ALLOW_INSECURE: "true"
+      MP_MAX_MESSAGES: "5000"
+    ports:
+      - "${MAIL_SMTP_PORT:-1025}:1025"   # SMTP
+      - "${MAIL_UI_PORT:-8025}:8025"     # Web UI
+    volumes:
+      - mailpit-data:/data
+    healthcheck:
+      test: ["CMD", "/mailpit", "readyz"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - omiicare-net
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+
+  # ---------------------------------------------------------------------------
+  # MinIO — S3-compatible object storage (documents, attachments, reports).
+  # API on 9000, console on 9001.
+  # ---------------------------------------------------------------------------
+  minio:
+    image: minio/minio:latest
+    container_name: omiicare-minio
+    restart: *restart-policy
+    logging: *default-logging
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+    ports:
+      - "${MINIO_API_PORT:-9000}:9000"     # S3 API
+      - "${MINIO_CONSOLE_PORT:-9001}:9001" # Web console
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    networks:
+      - omiicare-net
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  # ---------------------------------------------------------------------------
+  # Keycloak — identity & access management (OIDC/OAuth2) for the backend.
+  # Runs in dev mode and imports the `omiicare` realm on startup.
+  # ---------------------------------------------------------------------------
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0
+    container_name: omiicare-keycloak
+    restart: *restart-policy
+    logging: *default-logging
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
+      KC_HEALTH_ENABLED: "true"
+      KC_METRICS_ENABLED: "true"
+      KC_HTTP_ENABLED: "true"
+    ports:
+      - "${KEYCLOAK_PORT:-8081}:8080"
+      - "${KEYCLOAK_MGMT_PORT:-9010}:9000"  # management/health endpoint (host 9010 avoids MinIO 9000)
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import:ro
+    healthcheck:
+      # Keycloak 25 exposes health on the management port 9000 (/health/ready).
+      # Image has no curl/wget by default, so probe via the bundled JDK.
+      test:
+        - "CMD-SHELL"
+        - >-
+          exec 3<>/dev/tcp/localhost/9000 &&
+          echo -e 'GET /health/ready HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n' >&3 &&
+          cat <&3 | grep -q '200 OK'
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 45s
+    networks:
+      - omiicare-net
+    deploy:
+      resources:
+        limits:
+          memory: 768M
+
+  # ---------------------------------------------------------------------------
+  # WireMock — stubs external systems (insurance, labs, payment gateways) for QA.
+  # Mappings are loaded from the mounted ./wiremock/mappings directory.
+  # ---------------------------------------------------------------------------
+  wiremock:
+    image: wiremock/wiremock:3.9.1
+    container_name: omiicare-wiremock
+    restart: *restart-policy
+    logging: *default-logging
+    command: ["--global-response-templating", "--verbose"]
+    ports:
+      - "${WIREMOCK_PORT:-8089}:8080"
+    volumes:
+      - ./wiremock/mappings:/home/wiremock/mappings:ro
+      - ./wiremock/__files:/home/wiremock/__files:ro
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/__admin/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - omiicare-net
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  # ---------------------------------------------------------------------------
+  # Prometheus — scrapes metrics from itself and the backend Actuator endpoint.
+  # ---------------------------------------------------------------------------
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: omiicare-prometheus
+    restart: *restart-policy
+    logging: *default-logging
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=15d"
+      - "--web.enable-lifecycle"
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+    volumes:
+      - ../monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    extra_hosts:
+      # Lets Prometheus reach the backend running on the host (M3+ option).
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:9090/-/healthy || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    networks:
+      - omiicare-net
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+  # ---------------------------------------------------------------------------
+  # Grafana — dashboards. Auto-provisions the Prometheus datasource + dashboards.
+  # ---------------------------------------------------------------------------
+  grafana:
+    image: grafana/grafana:latest
+    container_name: omiicare-grafana
+    restart: *restart-policy
+    logging: *default-logging
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+    ports:
+      - "${GRAFANA_PORT:-3000}:3000"
+    volumes:
+      - ../monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ../monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:3000/api/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - omiicare-net
+    deploy:
+      resources:
+        limits:
+          memory: 384M
+
+  # ---------------------------------------------------------------------------
+  # SonarQube — static analysis / code quality gate for CI and local runs.
+  # ---------------------------------------------------------------------------
+  sonarqube:
+    image: sonarqube:10-community
+    container_name: omiicare-sonarqube
+    restart: *restart-policy
+    logging: *default-logging
+    environment:
+      # Embedded H2 DB is fine for local QA; use a real DB in CI if needed.
+      SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: "true"
+    ports:
+      - "${SONARQUBE_PORT:-9002}:9000"
+    volumes:
+      - sonarqube-data:/opt/sonarqube/data
+      - sonarqube-extensions:/opt/sonarqube/extensions
+      - sonarqube-logs:/opt/sonarqube/logs
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://localhost:9000/api/system/status | grep -q '\"status\":\"UP\"' || exit 1"]
+      interval: 20s
+      timeout: 10s
+      retries: 10
+      start_period: 90s
+    networks:
+      - omiicare-net
+    # SonarQube (Elasticsearch) needs a higher mmap count on the host:
+    #   sudo sysctl -w vm.max_map_count=262144
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+
+  # ---------------------------------------------------------------------------
+  # backend — the omiiCARE Spring Boot application (BUILT IN MILESTONE 3+).
+  # Uncomment and provide the built image / build context once it exists.
+  # It joins omiicare-net and reaches Postgres at host `postgres:5432`.
+  # ---------------------------------------------------------------------------
+  # backend:
+  #   build:
+  #     context: ../../apps/backend
+  #     dockerfile: Dockerfile
+  #   image: omiicare/backend:latest
+  #   container_name: omiicare-backend
+  #   restart: *restart-policy
+  #   logging: *default-logging
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #     keycloak:
+  #       condition: service_healthy
+  #   environment:
+  #     SPRING_PROFILES_ACTIVE: docker
+  #     SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-omiicare}
+  #     SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-omiicare}
+  #     SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-omiicare}
+  #     SPRING_DATA_REDIS_HOST: redis
+  #     SPRING_DATA_REDIS_PORT: 6379
+  #     SPRING_MAIL_HOST: mailhog
+  #     SPRING_MAIL_PORT: 1025
+  #     KEYCLOAK_AUTH_SERVER_URL: http://keycloak:8080
+  #     MINIO_ENDPOINT: http://minio:9000
+  #     MINIO_ACCESS_KEY: ${MINIO_ROOT_USER:-minioadmin}
+  #     MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD:-minioadmin}
+  #   ports:
+  #     - "8080:8080"
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "wget -q --spider http://localhost:8080/actuator/health || exit 1"]
+  #     interval: 15s
+  #     timeout: 5s
+  #     retries: 5
+  #     start_period: 60s
+  #   networks:
+  #     - omiicare-net
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         memory: 1G
+
+# --- Named volumes (persist data across container restarts) ------------------
+volumes:
+  postgres-data:
+  redis-data:
+  mailpit-data:
+  minio-data:
+  prometheus-data:
+  grafana-data:
+  sonarqube-data:
+  sonarqube-extensions:
+  sonarqube-logs:
+
+# --- Shared bridge network ---------------------------------------------------
+networks:
+  omiicare-net:
+    driver: bridge
+    name: omiicare-net

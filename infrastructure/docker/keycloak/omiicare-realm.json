@@ -1,0 +1,56 @@
+{
+  "realm": "omiicare",
+  "enabled": true,
+  "displayName": "omiiCARE",
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "accessTokenLifespan": 300,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+  "roles": {
+    "realm": [
+      {
+        "name": "SUPER_ADMIN",
+        "description": "Full administrative access across the omiiCARE platform"
+      },
+      {
+        "name": "DOCTOR",
+        "description": "Clinical user with access to patient care workflows"
+      },
+      {
+        "name": "PATIENT",
+        "description": "Patient-facing self-service access"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "omiicare-backend",
+      "name": "omiiCARE Backend Service",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "bearerOnly": false,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "secret": "omiicare-backend-secret",
+      "redirectUris": [
+        "http://localhost:8080/*"
+      ],
+      "webOrigins": [
+        "http://localhost:8080"
+      ],
+      "defaultClientScopes": [
+        "web-origins",
+        "profile",
+        "roles",
+        "email"
+      ]
+    }
+  ]
+}

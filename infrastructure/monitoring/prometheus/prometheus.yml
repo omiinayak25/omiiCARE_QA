@@ -1,0 +1,36 @@
+# =============================================================================
+# omiiCARE — Prometheus scrape configuration
+# -----------------------------------------------------------------------------
+# Scrapes Prometheus itself and the omiiCARE Spring Boot backend (Actuator
+# Micrometer/Prometheus endpoint). Mounted read-only into the prometheus
+# container at /etc/prometheus/prometheus.yml.
+# =============================================================================
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: omiicare-qa
+
+scrape_configs:
+  # --- Prometheus self-monitoring --------------------------------------------
+  - job_name: prometheus
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["localhost:9090"]
+        labels:
+          service: prometheus
+
+  # --- omiiCARE backend (Spring Boot Actuator / Micrometer) ------------------
+  # When the backend runs as a compose service (M3+), target `backend:8080`.
+  # When it runs on the host (dev), target `host.docker.internal:8080`.
+  - job_name: omiicare-backend
+    metrics_path: /actuator/prometheus
+    scrape_interval: 15s
+    static_configs:
+      - targets:
+          - "host.docker.internal:8080"
+          # - "backend:8080"   # uncomment when backend joins the compose stack
+        labels:
+          service: omiicare-backend
+          application: omiicare

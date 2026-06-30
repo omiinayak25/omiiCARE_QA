@@ -1,0 +1,40 @@
+# Reusable test workflow (SKELETON).
+# Milestone 2: structure only. Full pipeline behaviour lands in Milestone 8.
+---
+name: _reusable-test
+
+on:
+  workflow_call:
+    inputs:
+      java-version:
+        description: "JDK version to test with"
+        required: false
+        type: string
+        default: "21"
+
+jobs:
+  test:
+    name: Unit Tests (Maven)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ inputs.java-version }}
+          cache: maven
+
+      - name: Run tests
+        run: mvn -B -ntp test
+
+      - name: Upload Surefire reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: "**/target/surefire-reports/**"
+          if-no-files-found: ignore
+          retention-days: 7

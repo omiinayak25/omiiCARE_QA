@@ -1,0 +1,23 @@
+# Reusable docs workflow (SKELETON).
+# Milestone 2: structure only. Full pipeline behaviour lands in Milestone 8.
+# Verifies Markdown links across docs/ and top-level *.md files.
+---
+name: _reusable-docs
+
+on:
+  workflow_call:
+
+jobs:
+  docs:
+    name: Markdown Link Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Link check (lychee)
+        continue-on-error: true
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: "--no-progress --verbose docs/ ./*.md"
+          fail: false

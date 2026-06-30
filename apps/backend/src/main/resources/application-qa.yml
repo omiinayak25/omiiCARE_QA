@@ -1,0 +1,27 @@
+# =============================================================================
+# QA profile — external PostgreSQL. All connection details come from the
+# environment (no secrets committed). Synthetic PHI-safe seed data is loaded so
+# QA can exercise realistic flows.
+# =============================================================================
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT:5432}/${DB_NAME:omiicare_qa}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      pool-name: omiicare-qa-pool
+      maximum-pool-size: 20
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    locations: classpath:db/migration,classpath:db/seed
+
+management:
+  tracing:
+    sampling:
+      probability: 0.5
+
+logging:
+  level:
+    com.omiicare.qa: INFO

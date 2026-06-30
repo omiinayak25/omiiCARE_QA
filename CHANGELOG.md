@@ -10,7 +10,47 @@ See [VERSIONING.md](VERSIONING.md) for the versioning policy.
 
 ### Added
 
-- Placeholder for changes accumulating toward the next release.
+- Changes accumulating toward the next release.
+
+## [0.2.0] - 2026-06-30
+
+Milestone 2 — Enterprise Infrastructure & Environment Foundation. The bootable
+technical foundation every future module reuses. No healthcare modules, business
+logic, authentication, or automation by design.
+
+### Added
+
+- **Maven reactor:** root `pom.xml` (Spring Boot 3.3 parent, Java 21, centralized
+  dependency & plugin management, `quality` profile) and the `apps/backend` module.
+- **Bootable backend shell:** `OmiiCareQaApplication` with Actuator health/metrics,
+  Prometheus endpoint, and Micrometer→OpenTelemetry tracing — no domain logic yet.
+- **Profile-driven configuration:** `application.yml` plus `dev` (H2), `local`,
+  `docker`, `test`, `qa`, `stage`, and `prod` (PostgreSQL) profiles. Database
+  selection is configuration-only — no code change to switch.
+- **Observability foundation:** `CorrelationIdFilter` propagating correlation/request
+  IDs into the MDC and response headers; `logback-spring.xml` structured logging with
+  correlation/trace/span IDs and rotation.
+- **Flyway migrations:** `V1` baseline platform schema (tenancy, identity, RBAC, audit)
+  and a portable, idempotent repeatable seed (`R__`) loading 12 roles, permissions, and
+  a synthetic PHI-safe DEMO tenant/hospital/departments/admin.
+- **Docker Compose stack:** PostgreSQL, Redis, Mailpit, MinIO, Keycloak (realm import),
+  WireMock, Prometheus, Grafana (provisioned datasource + dashboard), and SonarQube —
+  with health checks, named volumes, and a shared network.
+- **Developer scripts:** cross-platform `setup`, `start`, `stop`, `reset`, and
+  `health-check` (`.sh` + `.bat`) with a shared bash helper library.
+- **Code-quality tooling:** Checkstyle, PMD, SpotBugs, Spotless, and JaCoCo wired via
+  the `quality` profile (report-only in M2; enforced in M8), plus `.pre-commit-config.yaml`.
+- **Reusable CI structure:** `_reusable-*` GitHub Actions (build, test, lint, security,
+  docs) composed by an entry `ci.yml` — structure only; full pipelines arrive in M8.
+- **Database module:** migration naming standards, rollback strategy, database changelog,
+  seed-data catalog, and operational helper scripts under `database/`.
+- **Environment templates:** root `.env.example` and `infrastructure/docker/.env.example`.
+
+### Verified
+
+- `mvn -Pquality verify` builds cleanly; backend boots on the `test`/`dev` profiles;
+  Flyway applies the baseline schema and seed; smoke tests (context load, schema, seed)
+  pass. Docker stack configs validate but are not run here (Docker not installed).
 
 ## [0.1.0] - 2026-06-30
 
@@ -45,5 +85,6 @@ no application, API, or automation code by design.
   plus the cross-document consistency baseline.
 - **License:** MIT license with a healthcare-data notice.
 
-[Unreleased]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/omiinayak25/omiiCARE_QA/releases/tag/v0.1.0

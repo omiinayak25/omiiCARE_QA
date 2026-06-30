@@ -1,0 +1,31 @@
+# =============================================================================
+# STAGE profile — pre-production. External PostgreSQL, production-like settings.
+# Seed data is NOT auto-loaded (stage mirrors production data handling).
+# All credentials are injected from the environment / secret manager.
+# =============================================================================
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT:5432}/${DB_NAME:omiicare_stage}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      pool-name: omiicare-stage-pool
+      maximum-pool-size: 25
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    locations: classpath:db/migration   # migrations only; no synthetic seeds
+
+management:
+  endpoint:
+    health:
+      show-details: never
+  tracing:
+    sampling:
+      probability: 0.25
+
+logging:
+  level:
+    com.omiicare.qa: INFO
+    root: WARN

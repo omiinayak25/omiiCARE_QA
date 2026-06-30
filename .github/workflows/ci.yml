@@ -1,0 +1,29 @@
+# Entry CI pipeline — composes the reusable workflow skeletons.
+# Milestone 2: ties skeletons together. Full matrices (nightly, release,
+# hotfix, security, docs) are added in Milestone 8 — see workflows/README.md.
+---
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build
+    uses: ./.github/workflows/_reusable-build.yml
+
+  test:
+    name: Test
+    needs: build
+    uses: ./.github/workflows/_reusable-test.yml
+
+  lint:
+    name: Lint
+    needs: build
+    uses: ./.github/workflows/_reusable-lint.yml
