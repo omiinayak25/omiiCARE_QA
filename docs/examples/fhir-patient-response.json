@@ -1,0 +1,30 @@
+{
+  "resourceType": "Patient",
+  "id": "1",
+  "identifier": [
+    {
+      "system": "urn:omiicare:mrn",
+      "value": "MRN-0001"
+    }
+  ],
+  "active": true,
+  "name": [
+    {
+      "use": "official",
+      "family": "Public",
+      "given": ["John"]
+    }
+  ],
+  "gender": "male",
+  "birthDate": "1985-04-12",
+  "telecom": [
+    {
+      "system": "email",
+      "value": "john.public@demo.example"
+    },
+    {
+      "system": "phone",
+      "value": "+1-555-0101"
+    }
+  ]
+}

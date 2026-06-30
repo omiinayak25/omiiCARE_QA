@@ -1,0 +1,20 @@
+{
+  "type": "https://omiicare.example/errors/OMII-400",
+  "title": "Validation failed",
+  "status": 400,
+  "detail": "One or more fields are invalid",
+  "errorCode": "OMII-400",
+  "correlationId": "b1f8c0a2-4d6e-4a1b-9c3d-7e2f5a8b1c40",
+  "timestamp": "2026-06-30T14:05:12.482Z",
+  "path": "/api/v1/patients",
+  "errors": [
+    {
+      "field": "lastName",
+      "message": "must not be blank"
+    },
+    {
+      "field": "dateOfBirth",
+      "message": "date of birth must be in the past"
+    }
+  ]
+}

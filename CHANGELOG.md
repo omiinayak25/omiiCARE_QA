@@ -12,6 +12,57 @@ See [VERSIONING.md](VERSIONING.md) for the versioning policy.
 
 - Changes accumulating toward the next release.
 
+## [1.0.0] - 2026-06-30
+
+**First stable release.** Milestone 10 — Production Hardening, Portfolio
+Excellence & Release 1.0.0. A complete enterprise Healthcare Quality Engineering
+Platform: healthcare web app + REST/FHIR APIs, a full quality-engineering
+ecosystem (automation, manual QA, performance/security/accessibility/visual/
+contract/chaos/observability/compliance), CI/CD, and an optional AI platform —
+all in one modular monorepo. Synthetic PHI-safe data only; no formal certification
+is claimed.
+
+### Added (Milestone 10)
+
+- **World-class README** with quick start, architecture diagram, module map, and
+  documentation index; release `RELEASE_NOTES.md`.
+- **Release docs:** `docs/KNOWN_ISSUES.md`, `docs/UPGRADE_GUIDE.md`,
+  `docs/MIGRATION_NOTES.md`, and `docs/COMPATIBILITY_MATRIX.md`.
+- **Portfolio & developer-experience guides:** `docs/REPOSITORY_TOUR.md`,
+  `docs/DEMO_GUIDE.md`, `docs/FEATURE_MATRIX.md`, `docs/TECHNOLOGY_MATRIX.md`,
+  `docs/LEARNING_ROADMAP.md`, and `docs/FAQ.md`.
+- **Runnable API examples & sample data:** a valid Postman v2.1 collection
+  (`postman/`), example request/response/Problem-Details/FHIR payloads
+  (`docs/examples/`), and `docs/SAMPLE_DATA.md`.
+- **Open-source readiness:** `.github/FUNDING.yml`, `CONTRIBUTORS.md`,
+  `docs/GITHUB_PROJECT_MANAGEMENT.md`, and `docs/OPEN_SOURCE_READINESS.md`.
+
+### Changed / Fixed (Milestone 10)
+
+- Audited the entire repository: full clean reactor build green (backend 9 +
+  automation 5 + AI 9 tests) and frontend build + lint green; 0 broken internal
+  links across all Markdown; no placeholders; all JSON valid.
+- Made `JwtServiceTest` compiler-agnostic (typed authorities list) so it builds
+  identically under javac and the IDE's Eclipse compiler.
+- Reconciled documentation: Node pinned to 22 everywhere; clarified that the
+  non-production `DataInitializer` grants `demo.admin` the SUPER_ADMIN role.
+- Bumped all module versions to **1.0.0**.
+
+### Release scope (Milestones 1–9, summarized)
+
+- **Foundation & governance** (M1): architecture, ADRs, ~50 governance documents.
+- **Infrastructure** (M2): Maven reactor, profile-driven H2/PostgreSQL, Flyway,
+  Docker Compose stack, cross-platform scripts, code-quality tooling, OpenTelemetry.
+- **Backend** (M3): JWT auth + RBAC, Patient/Provider/Appointment, FHIR Patient
+  facade, audit/validation/exception frameworks, OpenAPI.
+- **Frontend** (M4): React/TS/Vite SUT with role-based portals and stable selectors.
+- **Automation** (M5): Rest Assured/Playwright/Selenium/Cucumber + resource-adapter layer.
+- **Manual QA** (M6): requirements, RTM, plans, ~62 cases, defect/risk/release assets.
+- **Advanced QE** (M7): performance, security, accessibility, visual, database,
+  contract, chaos, resilience, observability, and compliance modules.
+- **DevOps** (M8): reusable GitHub Actions, container images, quality gates, releases.
+- **AI** (M9): provider abstraction, prompt library, guardrails — optional and reviewable.
+
 ## [0.9.0] - 2026-06-30
 
 Milestone 9 — AI-Native Quality Engineering Platform. AI assists engineers and
@@ -320,7 +371,8 @@ no application, API, or automation code by design.
   plus the cross-document consistency baseline.
 - **License:** MIT license with a healthcare-data notice.
 
-[Unreleased]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.9.0...HEAD
+[Unreleased]: https://github.com/omiinayak25/omiiCARE_QA/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.9.0...v1.0.0
 [0.9.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/omiinayak25/omiiCARE_QA/compare/v0.6.0...v0.7.0

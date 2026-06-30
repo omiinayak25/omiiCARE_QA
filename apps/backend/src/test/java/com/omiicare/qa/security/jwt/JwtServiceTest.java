@@ -29,7 +29,9 @@ class JwtServiceTest {
         assertThat(claims.getSubject()).isEqualTo("alice");
         assertThat(claims.get(JwtService.CLAIM_TYPE)).isEqualTo(JwtService.TYPE_ACCESS);
         assertThat(claims.get(JwtService.CLAIM_TENANT, Number.class).longValue()).isEqualTo(42L);
-        assertThat(claims.get(JwtService.CLAIM_AUTHORITIES, List.class)).contains("patient:read");
+        @SuppressWarnings("unchecked")
+        List<String> authorities = claims.get(JwtService.CLAIM_AUTHORITIES, List.class);
+        assertThat(authorities).contains("patient:read");
     }
 
     @Test

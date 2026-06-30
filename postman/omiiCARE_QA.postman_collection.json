@@ -1,0 +1,249 @@
+{
+  "info": {
+    "_postman_id": "0a6b1c2d-3e4f-5a6b-7c8d-9e0f1a2b3c4d",
+    "name": "omiiCARE_QA 1.0.0",
+    "description": "Runnable API examples for the omiiCARE_QA Healthcare Quality Engineering Platform backend (Java 21 / Spring Boot 3). All endpoints are under /api/v1/. Run **Auth / Login** first: its test script captures `data.accessToken` into the collection variable `accessToken`, which every other request sends as `Authorization: Bearer {{accessToken}}`. Success bodies use the standard envelope `{ success, data, correlationId, timestamp }`; errors are RFC 7807 ProblemDetail with `errorCode` like OMII-4xx. Demo credentials: demo.admin / Admin@12345 (synthetic, PHI-safe). See postman/README.md and docs/examples/README.md.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Capture the access token into the collection variable so every",
+                  "// subsequent request can send Authorization: Bearer {{accessToken}}.",
+                  "pm.test(\"status is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "var json = pm.response.json();",
+                  "pm.test(\"envelope is success\", function () {",
+                  "    pm.expect(json.success).to.eql(true);",
+                  "    pm.expect(json.data).to.have.property(\"accessToken\");",
+                  "});",
+                  "if (json.data && json.data.accessToken) {",
+                  "    pm.collectionVariables.set(\"accessToken\", json.data.accessToken);",
+                  "    pm.collectionVariables.set(\"refreshToken\", json.data.refreshToken);",
+                  "    console.log(\"accessToken captured (tokenType=\" + json.data.tokenType + \", expiresInSeconds=\" + json.data.expiresInSeconds + \")\");",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"demo.admin\",\n  \"password\": \"Admin@12345\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "login"]
+            },
+            "description": "Authenticate with username + password. Returns an access/refresh token pair (tokenType=Bearer, expiresInSeconds=900). The test script stores `data.accessToken` in the `accessToken` collection variable. Run this request first."
+          },
+          "response": []
+        },
+        {
+          "name": "Me",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "me"]
+            },
+            "description": "Return the currently authenticated principal: `data` = { username, tenantId, authorities[] }. Requires a valid Bearer token from Login."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Patients",
+      "item": [
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/patients?q=Sample&page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "patients"],
+              "query": [
+                { "key": "q", "value": "Sample", "description": "Optional free-text search over name / MRN." },
+                { "key": "page", "value": "0", "description": "Zero-based page index." },
+                { "key": "size", "value": "20", "description": "Page size (1..100, clamped server-side)." }
+              ]
+            },
+            "description": "Search / list patients (paginated, sorted by lastName). Requires the `patient:read` permission. `data` is a PageResponse: { content[], page, size, totalElements, totalPages, first, last }."
+          },
+          "response": []
+        },
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Maria\",\n  \"lastName\": \"Sample\",\n  \"dateOfBirth\": \"1992-03-18\",\n  \"gender\": \"FEMALE\",\n  \"email\": \"maria.sample@demo.example\",\n  \"phone\": \"+1-555-0142\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "patients"]
+            },
+            "description": "Register a new patient. Requires the `patient:write` permission. Returns 201 Created. `mrn` is optional (auto-generated when omitted). Validation errors return RFC 7807 ProblemDetail (OMII-400) with a per-field `errors[]` list. Synthetic data only."
+          },
+          "response": []
+        },
+        {
+          "name": "Get",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/patients/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "patients", "1"]
+            },
+            "description": "Fetch a single patient by numeric id. Requires `patient:read`. Patient id 1 is the seeded MRN-0001 (John Public) in the DEMO tenant. Unknown ids return OMII-404."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Appointments",
+      "item": [
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/appointments?page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "appointments"],
+              "query": [
+                { "key": "page", "value": "0", "description": "Zero-based page index." },
+                { "key": "size", "value": "20", "description": "Page size (1..100, clamped server-side)." }
+              ]
+            },
+            "description": "List appointments (paginated, newest scheduledStart first). Requires `appointment:read`. `data` is a PageResponse of AppointmentResponse."
+          },
+          "response": []
+        },
+        {
+          "name": "Book",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patientId\": 1,\n  \"providerId\": 1,\n  \"scheduledStart\": \"2027-02-10T14:00:00Z\",\n  \"scheduledEnd\": \"2027-02-10T14:30:00Z\",\n  \"reason\": \"Routine cardiology follow-up\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/appointments",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "appointments"]
+            },
+            "description": "Book a new appointment. Requires `appointment:write`. Returns 201 Created. `scheduledStart` must be in the future. Business rule BR-APPT-001 forbids double-booking the same provider in an overlapping slot and returns 422 (OMII-422, ruleId=BR-APPT-001)."
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/appointments/1/cancel",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "appointments", "1", "cancel"]
+            },
+            "description": "Cancel an appointment by id. Requires `appointment:write`. Returns the appointment with status=CANCELLED. Appointment id 1 is the seeded booked slot for MRN-0001 / DR-001."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Providers",
+      "item": [
+        {
+          "name": "List",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/providers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "providers"]
+            },
+            "description": "List clinical providers for the tenant. `data` is a list of ProviderResponse { id, code, firstName, lastName, specialty, status }. The DEMO tenant seeds DR-001 (Alice Cardwell, Cardiology) and DR-002 (Brian Rayner, Radiology)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "FHIR",
+      "item": [
+        {
+          "name": "Patient Read",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Accept", "value": "application/fhir+json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/fhir/Patient/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "fhir", "Patient", "1"]
+            },
+            "description": "Read a Patient as a FHIR R4 resource (media type application/fhir+json). Requires `patient:read`. Returns a bare FHIR `Patient` resource (no envelope). MRN identifier system is urn:omiicare:mrn; gender uses the FHIR AdministrativeGender value set."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080", "type": "string" },
+    { "key": "accessToken", "value": "", "type": "string" },
+    { "key": "refreshToken", "value": "", "type": "string" }
+  ]
+}

@@ -2,7 +2,7 @@
 
 [![Build](https://img.shields.io/badge/build-passing-brightgreen?style=flat-square)](.github/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.9.0-orange?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.0.0-brightgreen?style=flat-square)](CHANGELOG.md)
 [![Java](https://img.shields.io/badge/Java-21-007396?style=flat-square&logo=openjdk&logoColor=white)](pom.xml)
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black)](apps/frontend/package.json)
 [![Docs](https://img.shields.io/badge/docs-passing-brightgreen?style=flat-square)](docs/)
@@ -10,98 +10,180 @@
 [![SemVer](https://img.shields.io/badge/semver-2.0.0-informational?style=flat-square)](VERSIONING.md)
 [![Conventional Commits](https://img.shields.io/badge/commits-conventional-yellow?style=flat-square)](CONTRIBUTING.md)
 
-> **Enterprise Healthcare Quality Engineering Platform** — a single, modular monorepo that pairs a production-grade healthcare web application (the System Under Test) with a first-class quality-engineering platform that tests it across UI, API, database, performance, security, accessibility, and visual layers.
+> **Enterprise Healthcare Quality Engineering Platform.** omiiCARE_QA is a single, modular monorepo that pairs a production-grade healthcare web application (the System Under Test) with a first-class quality-engineering platform that tests it across UI, API, database, performance, security, accessibility, visual, contract, chaos, resilience, observability, and compliance layers — all on synthetic, PHI-safe data. This is the **1.0.0 release**: all ten milestones are complete and the reactor builds green.
 
-## Purpose
+---
 
-omiiCARE_QA exists to demonstrate, end to end, what world-class healthcare quality engineering looks like when it is designed — not improvised. It is built **documentation-first**: architecture and governance are written before any line of application code, and every milestone follows *Design → Document → Review → Implement → Test → Refactor → Document*. This README is the front door; it orients new readers and links to the authoritative sources of truth.
+## Why This Exists
 
-## Scope
-
-- **In scope:** the project pitch, why it exists, feature highlights, the monorepo map, the technology summary, current milestone status, and a complete documentation index.
-- **Out of scope:** detailed architecture and per-module design (see [ARCHITECTURE.md](ARCHITECTURE.md) and the `docs/` blueprints). Facts such as versions and the technology matrix are owned by [docs/PROJECT_METADATA.md](docs/PROJECT_METADATA.md) and are only summarized here.
-
-## Why This Repo Exists
+Quality engineering for clinical systems must be rigorous, auditable, and standards-aware — yet most reference projects show only a slice. omiiCARE_QA was built **documentation-first** to demonstrate, end to end, what world-class healthcare QE looks like when it is *designed* rather than improvised.
 
 | Driver | What it means here |
 |--------|--------------------|
-| Healthcare is high-stakes | Quality engineering for clinical systems must be rigorous, auditable, and standards-aware (FHIR, HL7, ICD-10, CPT, LOINC, SNOMED CT). |
-| QA deserves first-class status | The test platform is a peer of the application, not an afterthought bolted on at the end. |
-| Architecture beats accident | Clean Architecture + DDD on the backend, modular React on the frontend, and an adapter-centric automation core make the system testable *by design*. |
-| Portfolio-grade transparency | Everything is open, documented, and PHI-safe, so the repository can teach as well as work. |
+| Healthcare is high-stakes | Standards-aware by design: FHIR R4, HL7, ICD-10, CPT, LOINC, SNOMED CT — with audit, validation, and consent frameworks baked into the backend. |
+| QA is a first-class peer | The test platform is an equal of the application, not an afterthought — adapter-centric automation plus a ten-discipline `quality/` suite. |
+| Architecture beats accident | Clean Architecture + DDD on the backend, modular React on the frontend, and a resource-adapter automation core make the system testable *by design*. |
+| Portfolio-grade transparency | Everything is open, documented, and **PHI-safe**, so the repository can teach as well as run. See [docs/PORTFOLIO_GUIDE.md](docs/PORTFOLIO_GUIDE.md) and [docs/INTERVIEW_GUIDE.md](docs/INTERVIEW_GUIDE.md). |
 
 ## Feature Highlights
 
-| Capability | Description | Arrives |
-|------------|-------------|---------|
-| Healthcare platform core | Spring Boot domain, REST + FHIR APIs, JWT/RBAC auth, audit/validation/exception frameworks | M3 |
-| Role-based portals | React + Vite SUT for 12 RBAC roles, WCAG AA, responsive/PWA | M4 |
-| Adapter-centric automation | Playwright, Selenium, Rest Assured, Cucumber over a common resource-adapter layer | M5 |
-| Manual QE assets | Requirements, RTM, test plans, suites, defect & release management | M6 |
-| Advanced quality | Performance, security, accessibility, visual, contract, chaos, observability | M7 |
-| DevOps & CI/CD | Reusable GitHub Actions, quality gates, Docker, semantic-version automation | M8 |
-| AI-native QE | Provider-abstracted (Claude / OpenAI / local) prompt library and assistants | M9 |
-| Profile-driven environments | H2 ↔ PostgreSQL switch by configuration only across 11 environments | M2 |
+| Capability | Description |
+|------------|-------------|
+| Healthcare platform core | Java 21 / Spring Boot 3 domain — Patient, Provider, Appointment — with JWT auth, RBAC, and audit/validation/exception frameworks. |
+| FHIR R4 Patient facade | Standards-conformant `GET /api/v1/fhir/Patient/{id}` exposing the internal model as an FHIR R4 resource. |
+| Role-based React portals | React 18 + TypeScript + Vite + MUI SUT with permission-aware navigation and stable `data-testid` hooks for automation. |
+| Adapter-centric automation | Rest Assured, Playwright, Selenium, and Cucumber unified over a shared resource-adapter layer. |
+| Ten-discipline quality suite | Performance, security, accessibility, visual, database, contract, chaos, resilience, observability, and compliance testing. |
+| AI-native QE | Provider-abstracted AI layer (Claude / OpenAI / local) with a prompt library and guardrails — configuration-driven, never vendor-coupled. |
+| Manual QE assets | ~46 documents: requirements, RTM, test plans, suites, defect and release management. |
+| RFC 7807 error contract | Structured `ProblemDetail` responses with stable `OMII-4xx` codes; business rule **BR-APPT-001** blocks double-booking with `422`. |
+| Profile-driven environments | H2 ↔ PostgreSQL switch by configuration only; Flyway migrations, Docker Compose stack, and reusable GitHub Actions CI/CD. |
 
-## Monorepo Map
+## Architecture at a Glance
 
-The full directory tree, with the purpose of every folder, lives in
-[PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md). At a glance:
+```
+                          ┌─────────────────────────────────────────────┐
+                          │                 omiiCARE_QA                  │
+                          │      Healthcare Quality Engineering Platform │
+                          └─────────────────────────────────────────────┘
+                                            │
+   ┌────────────────────────────┬──────────┴───────────┬─────────────────────────────┐
+   │                            │                       │                             │
+┌──▼───────────────┐   ┌────────▼─────────┐   ┌─────────▼──────────┐   ┌──────────────▼─────────┐
+│  apps/frontend   │   │   apps/backend   │   │     automation     │   │       quality          │
+│  React 18 + Vite │   │ Java 21 / Spring │   │ RestAssured /      │   │ perf · security · a11y │
+│  MUI · RBAC SUT  │◄──┤ Boot 3 · JWT/RBAC│◄──┤ Playwright /       │   │ visual · db · contract │
+│  :5173           │   │ FHIR R4 · audit  │   │ Selenium / Cucumber│   │ chaos · resilience ·   │
+│                  │   │ :8080            │   │ + resource adapters│   │ observability ·        │
+└──────────────────┘   └────────┬─────────┘   └─────────┬──────────┘   │ compliance             │
+                                │                       │              └────────────────────────┘
+                       ┌────────▼─────────┐   ┌─────────▼──────────┐   ┌────────────────────────┐
+                       │     database     │   │   manual-testing   │   │          ai            │
+                       │ Flyway · H2 /    │   │ ~46 docs · RTM ·   │   │ provider abstraction · │
+                       │ PostgreSQL seeds │   │ test plans/suites  │   │ prompt library ·       │
+                       └──────────────────┘   └────────────────────┘   │ guardrails             │
+                                                                       └────────────────────────┘
+   ┌──────────────────┐   ┌──────────────────┐   ┌──────────────────┐
+   │  infrastructure  │   │     .github      │   │  docs / scripts  │
+   │ Docker Compose   │   │ CI/CD · quality  │   │ blueprints · ADRs│
+   │ Postgres·Redis…  │   │ gates · releases │   │ dev helper CLIs  │
+   └──────────────────┘   └──────────────────┘   └──────────────────┘
 
-| Module | Role | Milestone |
-|--------|------|-----------|
-| `apps/backend` | Spring Boot domain, REST + FHIR APIs, auth, audit | M3 |
-| `apps/frontend` | React + Vite primary SUT, role-based portals | M4 |
-| `database` | Flyway migrations, schema, PHI-safe seeds | M2 |
-| `infrastructure` | Docker Compose stack (Postgres, Redis, MinIO, Keycloak, WireMock, Prometheus, Grafana, SonarQube) | M2 |
-| `automation` | UI/API/DB test platform + resource adapters | M5 |
-| `manual-testing` | Requirements, RTM, cases, suites, defects | M6 |
-| `quality` | Performance, security, a11y, visual, contract, chaos | M7 |
-| `ai` | Optional provider-abstracted AI assistants | M9 |
-| `.github` | Reusable GitHub Actions, issue/PR templates, quality gates | M8 |
-| `docs` | Governance, blueprints, ADRs | M1+ |
-
-## Tech Stack Summary
-
-Authoritative versions live in [docs/PROJECT_METADATA.md](docs/PROJECT_METADATA.md) §3. Summary:
-
-- **Backend:** Java 21 (LTS), Spring Boot 3.x, Spring Security + JWT, Spring Data JPA / Hibernate, Flyway, MapStruct, OpenAPI, Maven, JUnit 5 + Mockito.
-- **Frontend:** React 18+, TypeScript, Vite, React Router, TanStack Query, Axios, Material UI, React Hook Form + Zod, i18next.
-- **Automation & Quality:** Playwright, Selenium, Rest Assured, Cucumber/Gherkin, Allure / Extent, JMeter / k6 / Gatling, OWASP ZAP, axe-core, Lighthouse.
-- **Infrastructure & DevOps:** Docker / Docker Compose, PostgreSQL, Redis, MinIO, Keycloak, WireMock, Prometheus, Grafana, SonarQube, GitHub Actions, OpenTelemetry.
-- **AI Platform:** provider-abstracted (Claude, OpenAI, local LLMs) — configuration-driven, never vendor-coupled.
+  Maven reactor modules: apps/backend · automation · ai
+  Errors: RFC 7807 ProblemDetail (OMII-4xx)   |   Rule BR-APPT-001: no double-booking → 422
+```
 
 ## Quick Start
 
-> **NOTE — Milestone 1 (Foundation, Architecture & Governance).** This repository is
-> currently **documentation only**. There is intentionally **no application, API, or
-> automation code** yet. Runnable infrastructure arrives in **Milestone 2**, the
-> backend in **Milestone 3**, and the frontend in **Milestone 4**. See the milestone
-> status table below and [ROADMAP.md](ROADMAP.md).
+> **Prerequisites:** Java 21, Maven, Node 22, and (optionally) Docker. `scripts/setup.sh`
+> validates the toolchain and degrades gracefully when optional tooling is missing.
 
-For now, the "quick start" is to read the governance set:
+```bash
+# 1. Clone
+git clone https://github.com/omiinayak25/omiiCARE_QA.git
+cd omiiCARE_QA
 
-1. Read [MASTER_PROJECT_SPECIFICATION.md](MASTER_PROJECT_SPECIFICATION.md) — what omiiCARE_QA is.
-2. Read [docs/PROJECT_METADATA.md](docs/PROJECT_METADATA.md) — the canonical fact sheet.
-3. Read [ARCHITECTURE.md](ARCHITECTURE.md) — the target architecture.
-4. Read [CONTRIBUTING.md](CONTRIBUTING.md) — how to work in this repo.
+# 2. One-time environment setup (validates toolchain, bootstraps .env, builds backend)
+./scripts/setup.sh                       # Windows: scripts\setup.bat
 
-## Milestone Status
+# 3. Run the backend (dev profile, in-memory H2 — no external database needed)
+mvn -pl apps/backend spring-boot:run     # serves http://localhost:8080
 
-Full detail, deliverables, fences, and gates live in [ROADMAP.md](ROADMAP.md).
+# 4. Run the frontend (in a second terminal)
+cd apps/frontend
+npm install
+npm run dev                              # serves http://localhost:5173, proxies /api -> :8080
+```
+
+Then open **http://localhost:5173** and sign in with the synthetic demo account:
+
+| Field | Value |
+|-------|-------|
+| Username | `demo.admin` |
+| Password | `Admin@12345` |
+
+Explore the API directly via Swagger UI at **http://localhost:8080/swagger-ui.html**, and confirm
+liveness at **http://localhost:8080/actuator/health**.
+
+### Core API surface (`/api/v1/`)
+
+| Area | Endpoints |
+|------|-----------|
+| Auth | `POST auth/login` · `POST auth/refresh` · `GET auth/me` |
+| Patients | `patients` — CRUD, search, pagination |
+| Providers | `providers` — directory + lookup |
+| Appointments | `appointments` (+ `POST appointments/{id}/cancel`) — enforces **BR-APPT-001** (no double-booking → `422`) |
+| FHIR R4 | `GET fhir/Patient/{id}` |
+
+Full contract: [docs/API_BLUEPRINT.md](docs/API_BLUEPRINT.md) · FHIR mapping: [docs/FHIR_GUIDE.md](docs/FHIR_GUIDE.md) · business rules: [docs/BUSINESS_RULES.md](docs/BUSINESS_RULES.md).
+
+## Module Map
+
+| Module | Role | Charter |
+|--------|------|---------|
+| `apps/backend` | Spring Boot domain, REST + FHIR APIs, JWT/RBAC, audit | [apps/backend/README.md](apps/backend/README.md) |
+| `apps/frontend` | React + Vite primary SUT, role-based portals | [apps/frontend/README.md](apps/frontend/README.md) |
+| `automation` | UI/API/DB test platform + resource adapters | [automation/README.md](automation/README.md) |
+| `manual-testing` | Requirements, RTM, cases, suites, defects (~46 docs) | [manual-testing/README.md](manual-testing/README.md) |
+| `quality` | Performance, security, a11y, visual, db, contract, chaos, resilience, observability, compliance | [quality/README.md](quality/README.md) |
+| `ai` | Provider-abstracted AI assistants, prompt library, guardrails | [ai/README.md](ai/README.md) |
+| `database` | Flyway migrations, schema, PHI-safe seeds | [database/README.md](database/README.md) |
+| `infrastructure` | Docker Compose stack (Postgres, Redis, MinIO, Keycloak, WireMock, Prometheus, Grafana, SonarQube) | [infrastructure/README.md](infrastructure/README.md) |
+| `.github` | Reusable GitHub Actions, quality gates, release automation | [.github/workflows/README.md](.github/workflows/README.md) |
+| `scripts` | Cross-platform developer helper CLIs (setup, start, stop, reset, health) | [scripts/README.md](scripts/README.md) |
+
+The complete directory tree with the purpose of every folder lives in [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md).
+
+## Tech Stack
+
+Authoritative versions are owned by [docs/PROJECT_METADATA.md](docs/PROJECT_METADATA.md). Summary:
+
+| Layer | Technologies |
+|-------|--------------|
+| Backend | Java 21 (LTS), Spring Boot 3, Spring Security + JWT, Spring Data JPA / Hibernate, Flyway (H2 / PostgreSQL), MapStruct, OpenAPI, Maven, JUnit 5 + Mockito |
+| Frontend | React 18, TypeScript, Vite, MUI, React Router, TanStack Query, Axios, React Hook Form + Zod, i18next |
+| Automation | Rest Assured, Playwright, Selenium, Cucumber/Gherkin, Allure / Extent — over a shared resource-adapter layer |
+| Quality | JMeter / k6 / Gatling, OWASP ZAP, axe-core, Lighthouse, contract & chaos tooling |
+| Infra & DevOps | Docker / Docker Compose, PostgreSQL, Redis, MinIO, Keycloak, WireMock, Prometheus, Grafana, SonarQube, GitHub Actions, OpenTelemetry |
+| AI | Provider-abstracted (Claude / OpenAI / local) — configuration-driven, never vendor-coupled |
+
+## Testing
+
+| Goal | Command |
+|------|---------|
+| Full reactor unit/integration tests | `mvn test` |
+| Backend only | `mvn -pl apps/backend test` |
+| End-to-end automation suite | `mvn -pl automation test -Pe2e` |
+| Frontend build + lint | `cd apps/frontend && npm run build && npm run lint` |
+
+Reactor health at 1.0.0: **backend 9 + automation 5 + ai 9** tests passing; frontend build and lint green.
+The advanced disciplines each ship as a charter under [`quality/`](quality/README.md) — for example
+[performance](quality/performance/README.md), [security](quality/security/README.md),
+[accessibility](quality/accessibility/README.md), [visual](quality/visual/README.md),
+[contract](quality/contract-testing/README.md), [database](quality/database-testing/README.md),
+[chaos](quality/chaos/README.md), [resilience](quality/resilience/README.md),
+[observability](quality/observability/README.md), and [compliance](quality/compliance/README.md).
+
+Strategy and coverage targets: [docs/TEST_STRATEGY.md](docs/TEST_STRATEGY.md) ·
+[docs/MASTER_TEST_PLAN.md](docs/MASTER_TEST_PLAN.md) · [docs/TEST_PYRAMID.md](docs/TEST_PYRAMID.md) ·
+[docs/RTM.md](docs/RTM.md) · [docs/QUALITY_GATES.md](docs/QUALITY_GATES.md).
+
+## Milestone Status — All 10 Complete
+
+Full deliverables, fences, and gates live in [ROADMAP.md](ROADMAP.md).
 
 | # | Milestone | Status |
 |---|-----------|--------|
-| 1 | Foundation, Architecture & Governance | 🟦 In progress |
-| 2 | Infrastructure & Environment Foundation | ⬜ Not started |
-| 3 | Healthcare Platform Core (Backend) | ⬜ Not started |
-| 4 | Frontend Platform & Portals | ⬜ Not started |
-| 5 | Quality Engineering Platform (Automation) | ⬜ Not started |
-| 6 | Manual Quality Engineering Assets | ⬜ Not started |
-| 7 | Advanced Quality Engineering | ⬜ Not started |
-| 8 | DevOps, CI/CD & Release Engineering | ⬜ Not started |
-| 9 | AI-Native Quality Engineering | ⬜ Not started |
-| 10 | Production Hardening & Release 1.0.0 | ⬜ Not started |
+| 1 | Foundation, Architecture & Governance | ✅ Complete |
+| 2 | Infrastructure & Environment Foundation | ✅ Complete |
+| 3 | Healthcare Platform Core (Backend) | ✅ Complete |
+| 4 | Frontend Platform & Portals | ✅ Complete |
+| 5 | Quality Engineering Platform (Automation) | ✅ Complete |
+| 6 | Manual Quality Engineering Assets | ✅ Complete |
+| 7 | Advanced Quality Engineering | ✅ Complete |
+| 8 | DevOps, CI/CD & Release Engineering | ✅ Complete |
+| 9 | AI-Native Quality Engineering | ✅ Complete |
+| 10 | Production Hardening & Release 1.0.0 | ✅ Complete |
 
 ## Documentation Index
 
@@ -112,45 +194,32 @@ Full detail, deliverables, fences, and gates live in [ROADMAP.md](ROADMAP.md).
 | Architecture | [ARCHITECTURE.md](ARCHITECTURE.md) |
 | Repository structure | [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) |
 | Roadmap | [ROADMAP.md](ROADMAP.md) |
-| Contributing | [CONTRIBUTING.md](CONTRIBUTING.md) |
-| Code of Conduct | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) |
-| Security policy | [SECURITY.md](SECURITY.md) |
-| Versioning policy | [VERSIONING.md](VERSIONING.md) |
 | Change log | [CHANGELOG.md](CHANGELOG.md) |
-| Code ownership | [CODEOWNERS](CODEOWNERS) |
-| License | [LICENSE](LICENSE) |
+| API blueprint | [docs/API_BLUEPRINT.md](docs/API_BLUEPRINT.md) |
+| FHIR / HL7 guides | [docs/FHIR_GUIDE.md](docs/FHIR_GUIDE.md) · [docs/HL7_GUIDE.md](docs/HL7_GUIDE.md) |
+| Business rules | [docs/BUSINESS_RULES.md](docs/BUSINESS_RULES.md) |
+| Test strategy & plan | [docs/TEST_STRATEGY.md](docs/TEST_STRATEGY.md) · [docs/MASTER_TEST_PLAN.md](docs/MASTER_TEST_PLAN.md) · [docs/RTM.md](docs/RTM.md) |
+| Quality gates | [docs/QUALITY_GATES.md](docs/QUALITY_GATES.md) |
+| CI/CD & deployment | [docs/CI_CD_GUIDE.md](docs/CI_CD_GUIDE.md) · [docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md) |
+| Environments | [docs/ENVIRONMENT_GUIDE.md](docs/ENVIRONMENT_GUIDE.md) |
+| Portfolio & interview | [docs/PORTFOLIO_GUIDE.md](docs/PORTFOLIO_GUIDE.md) · [docs/INTERVIEW_GUIDE.md](docs/INTERVIEW_GUIDE.md) |
+| Versioning policy | [VERSIONING.md](VERSIONING.md) |
 
-## Examples
+## Contributing, Security & License
 
-- *New contributor:* start at this README, follow the Quick Start list, then open [CONTRIBUTING.md](CONTRIBUTING.md) before raising a pull request.
-- *Reviewer checking scope:* confirm a proposed change belongs to the active milestone using the status table here and the fences in [ROADMAP.md](ROADMAP.md).
-
-## Future Enhancements
-
-- Replace placeholder badges with live build, coverage, and SonarQube quality-gate badges once CI lands (M8).
-- Add an animated architecture overview and a hosted documentation site.
-- Generate the milestone status table automatically from [ROADMAP.md](ROADMAP.md) in CI.
-
-## Dependencies
-
-- Summarizes [docs/PROJECT_METADATA.md](docs/PROJECT_METADATA.md), [ARCHITECTURE.md](ARCHITECTURE.md), and [ROADMAP.md](ROADMAP.md).
-- Links the full governance set under the repository root and `docs/`.
-
-## References
-
-- [MASTER_PROJECT_SPECIFICATION.md](MASTER_PROJECT_SPECIFICATION.md)
-- [SECURITY.md](SECURITY.md) · [VERSIONING.md](VERSIONING.md) · [CONTRIBUTING.md](CONTRIBUTING.md)
+- **Contributing:** [CONTRIBUTING.md](CONTRIBUTING.md) · [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) · code ownership in [CODEOWNERS](CODEOWNERS).
+- **Security:** report vulnerabilities and review the healthcare compliance scope in [SECURITY.md](SECURITY.md).
+- **License:** released under the [MIT License](LICENSE). Maintained by [@omiinayak25](https://github.com/omiinayak25).
 
 ## Compliance Disclaimer
 
-omiiCARE_QA models **HIPAA-like** privacy practices and **FHIR/HL7** standards
-conformance for **educational and portfolio purposes only**. It uses **synthetic,
-PHI-safe data exclusively** and makes **no formal HIPAA, medical-device, or other
-regulatory certification claims**. See [SECURITY.md](SECURITY.md) for the full
-healthcare compliance scope.
+omiiCARE_QA models **HIPAA-like** privacy practices and **FHIR/HL7** standards conformance for
+**educational and portfolio purposes only**. It uses **synthetic, PHI-safe data exclusively** and
+makes **no formal HIPAA, medical-device, or other regulatory certification claims**. See
+[SECURITY.md](SECURITY.md) for the full healthcare compliance scope.
 
 ## Version History
 
 | Version | Date | Author | Notes |
 |---------|------|--------|-------|
-| 1.0 | 2026-06-30 | Principal Technical Writer | Initial project front door (Milestone 1) |
+| 1.0 | 2026-06-30 | Principal Engineer | Initial (Milestone 10) |

@@ -25,7 +25,7 @@ public class OpenApiConfig {
                                 .description(
                                         "REST and FHIR APIs for the omiiCARE_QA healthcare platform. "
                                                 + "All data is synthetic and PHI-safe; no formal certification is claimed.")
-                                .version("0.3.0")
+                                .version("1.0.0")
                                 .contact(new Contact().name("omiiCARE_QA").url(
                                         "https://github.com/omiinayak25/omiiCARE_QA"))
                                 .license(new License().name("MIT").url(

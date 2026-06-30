@@ -1,0 +1,7 @@
+{
+  "patientId": 1,
+  "providerId": 1,
+  "scheduledStart": "2027-02-10T14:00:00Z",
+  "scheduledEnd": "2027-02-10T14:30:00Z",
+  "reason": "Routine cardiology follow-up"
+}
