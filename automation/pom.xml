@@ -30,7 +30,7 @@
         <playwright.version>1.47.0</playwright.version>
         <selenium.version>4.25.0</selenium.version>
         <cucumber.version>7.20.1</cucumber.version>
-        <junit.platform.version>1.11.2</junit.platform.version>
+        <junit.platform.version>6.1.1</junit.platform.version>
         <datafaker.version>2.4.1</datafaker.version>
         <assertj.version>3.26.3</assertj.version>
         <awaitility.version>4.2.2</awaitility.version>
