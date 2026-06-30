@@ -49,7 +49,7 @@ jobs:
         run: echo "value=${IMAGE_OWNER,,}" >> "$GITHUB_OUTPUT"
 
       - name: Build backend image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: apps/backend/Dockerfile
@@ -59,7 +59,7 @@ jobs:
             ${{ env.REGISTRY }}/${{ steps.owner.outputs.value }}/omiicare-qa-backend:${{ inputs.version }}
 
       - name: Build frontend image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: apps/frontend
           file: apps/frontend/Dockerfile
