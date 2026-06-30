@@ -32,7 +32,7 @@
         <cucumber.version>7.20.1</cucumber.version>
         <junit.platform.version>1.11.2</junit.platform.version>
         <datafaker.version>2.4.1</datafaker.version>
-        <assertj.version>3.26.3</assertj.version>
+        <assertj.version>3.27.7</assertj.version>
         <awaitility.version>4.2.2</awaitility.version>
         <!-- Suites needing a live SUT are excluded from the default build. -->
         <excluded.test.tags>api-e2e,ui-e2e,bdd</excluded.test.tags>
