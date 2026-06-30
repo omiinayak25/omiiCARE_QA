@@ -56,7 +56,7 @@
         <spotless.version>2.43.0</spotless.version>
         <checkstyle.plugin.version>3.5.0</checkstyle.plugin.version>
         <pmd.plugin.version>3.25.0</pmd.plugin.version>
-        <spotbugs.plugin.version>4.8.6.4</spotbugs.plugin.version>
+        <spotbugs.plugin.version>4.10.2.0</spotbugs.plugin.version>
         <jacoco.version>0.8.12</jacoco.version>
 
         <!-- Coverage gate (raised as the codebase matures) -->
