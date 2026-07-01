@@ -6,38 +6,36 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Page object for the OpenMRS Reference Application patient-registration wizard. The RefApp
- * registration form is a multi-step questionnaire whose first step captures the patient's name. The
- * field ids are stable across the standard distribution ({@code #givenName}, {@code #familyName})
- * and the wizard advances via the {@code #next} / submit control.
+ * Page object for the OpenMRS Reference Application patient-registration wizard (Page Object layer).
+ * The RefApp registration form is a multi-step questionnaire: Demographics (name, gender, birthdate)
+ * → Contact Info (address, phone) → Confirm. Field selectors below are the verified RefApp
+ * selectors ({@code input[name="givenName"]}, {@code select[name="gender"]},
+ * {@code #birthdateDay-field}, {@code #address1}, {@code #next-button}, {@code #submit}).
  *
- * <p>This object models the first (demographics) step plus the navigation primitives; richer steps
- * can be layered on by subsequent suites without changing this contract.
+ * <p>Locators + UI interactions only — no assertions, no cross-page business logic. The complete
+ * registration business process lives in {@code PatientRegistrationWorkflow}.
  */
 public final class OpenmrsRegistrationPage extends PwBasePage {
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenmrsRegistrationPage.class);
 
-    private static final String GIVEN_NAME = "#givenName";
-    private static final String FAMILY_NAME = "#familyName";
-    private static final String NEXT_BUTTON = "#next, input[value='Next'], button:has-text('Next')";
-    private static final String CONFIRM_BUTTON =
-            "#submit, input[value='Confirm'], button:has-text('Confirm')";
+    private static final String GIVEN_NAME = "input[name=\"givenName\"]";
+    private static final String FAMILY_NAME = "input[name=\"familyName\"]";
+    private static final String GENDER = "select[name=\"gender\"], #gender-field";
+    private static final String BIRTH_DAY = "#birthdateDay-field";
+    private static final String BIRTH_MONTH = "#birthdateMonth-field";
+    private static final String BIRTH_YEAR = "#birthdateYear-field";
+    private static final String ADDRESS_1 = "#address1";
+    private static final String CITY = "#cityVillage";
+    private static final String NEXT_BUTTON = "#next-button, #next, button:has-text('Next')";
+    private static final String CONFIRM_BUTTON = "#submit, input[value='Confirm']";
     private static final String FORM_ROOT = "form, #registrationForm, .form-wrapper";
 
-    /**
-     * @param page the live Playwright page
-     */
     public OpenmrsRegistrationPage(Page page) {
         super(page);
     }
 
-    /**
-     * Waits until the registration form has rendered. The name field, when present, is the strongest
-     * signal; otherwise the form container is used as a fallback for theme variations.
-     *
-     * @return this page object
-     */
+    /** Waits until the registration form has rendered (name field, or form container fallback). */
     public OpenmrsRegistrationPage waitUntilLoaded() {
         page.waitForSelector(
                 GIVEN_NAME + ", " + FORM_ROOT,
@@ -51,54 +49,58 @@ public final class OpenmrsRegistrationPage extends PwBasePage {
         return isVisible(GIVEN_NAME);
     }
 
-    /**
-     * Enters the patient's given (first) name.
-     *
-     * @param givenName the given name
-     * @return this page object
-     */
     public OpenmrsRegistrationPage enterGivenName(String givenName) {
         type(GIVEN_NAME, givenName);
         return this;
     }
 
-    /**
-     * Enters the patient's family (last) name.
-     *
-     * @param familyName the family name
-     * @return this page object
-     */
     public OpenmrsRegistrationPage enterFamilyName(String familyName) {
         type(FAMILY_NAME, familyName);
         return this;
     }
 
-    /**
-     * Enters both name components in one call.
-     *
-     * @param givenName the given name
-     * @param familyName the family name
-     * @return this page object
-     */
     public OpenmrsRegistrationPage enterName(String givenName, String familyName) {
         return enterGivenName(givenName).enterFamilyName(familyName);
     }
 
-    /**
-     * Advances the wizard to the next step.
-     *
-     * @return this page object
-     */
+    /** Selects patient gender by OpenMRS code ({@code "M"} or {@code "F"}). */
+    public OpenmrsRegistrationPage selectGender(String code) {
+        page.locator(GENDER).first().selectOption(code);
+        return this;
+    }
+
+    /** Enters an exact birth date; month is selected by its first real option to stay locale-safe. */
+    public OpenmrsRegistrationPage enterBirthDate(int day, int year) {
+        page.locator(BIRTH_DAY).first().fill(Integer.toString(day));
+        page.locator(BIRTH_MONTH)
+                .first()
+                .selectOption(new com.microsoft.playwright.options.SelectOption().setIndex(1));
+        page.locator(BIRTH_YEAR).first().fill(Integer.toString(year));
+        return this;
+    }
+
+    public OpenmrsRegistrationPage enterAddressLine(String addressLine) {
+        type(ADDRESS_1, addressLine);
+        return this;
+    }
+
+    public OpenmrsRegistrationPage enterCity(String city) {
+        type(CITY, city);
+        return this;
+    }
+
+    /** Advances the wizard to the next step. */
     public OpenmrsRegistrationPage next() {
         click(NEXT_BUTTON);
         return this;
     }
 
-    /**
-     * Confirms / submits the registration.
-     *
-     * @return this page object
-     */
+    /** @return {@code true} when the final Confirm/submit control is visible. */
+    public boolean isConfirmVisible() {
+        return isVisible(CONFIRM_BUTTON);
+    }
+
+    /** Confirms / submits the registration. */
     public OpenmrsRegistrationPage confirm() {
         click(CONFIRM_BUTTON);
         return this;

@@ -1,5 +1,8 @@
 # OmiiCare QA Automation Framework
 
+> **Architecture standard:** this framework follows the **Layered Enterprise Test Automation Architecture** — see [docs/qa-management/TEST_AUTOMATION_ARCHITECTURE.md](../docs/qa-management/TEST_AUTOMATION_ARCHITECTURE.md) (layer responsibilities, dependency rules, design patterns, folder structure, examples).
+
+
 Enterprise, multi-system test-automation platform for healthcare applications.
 It validates UI, REST, and FHIR R4 behaviour against the **OpenMRS Reference
 Application** today and against any future target through a pluggable
