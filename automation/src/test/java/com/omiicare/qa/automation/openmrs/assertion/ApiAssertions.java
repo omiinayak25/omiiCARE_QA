@@ -39,7 +39,8 @@ public final class ApiAssertions {
     }
 
     public ApiAssertions jsonPathEquals(String path, Object expected) {
-        assertThat(response.jsonPath().get(path)).as("json path '%s'", path).isEqualTo(expected);
+        Object actual = response.jsonPath().get(path);
+        assertThat(actual).as("json path '%s'", path).isEqualTo(expected);
         return this;
     }
 
