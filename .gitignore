@@ -96,3 +96,8 @@ automation/playwright/results/
 automation/playwright/results-openmrs/
 trace.zip
 *.webm
+
+# --- Python bytecode cache ---
+__pycache__/
+*.pyc
+*.pyo
