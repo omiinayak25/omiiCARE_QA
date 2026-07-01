@@ -1,5 +1,7 @@
 # omiiCARE_QA — Project Index (Master Table of Contents)
 
+> **Automation architecture:** [Layered Enterprise Test Automation Architecture](qa-management/TEST_AUTOMATION_ARCHITECTURE.md) — the permanent framework standard.
+
 > **Start here:** [PROJECT_POLICY.md](PROJECT_POLICY.md) — standing policy: OpenMRS (o2.openmrs.org) is the permanent primary System Under Test; this repo is an enterprise QA/QE platform, not a custom app.
 
 > **The single entry point** for the omiiCARE_QA enterprise healthcare QA platform.
