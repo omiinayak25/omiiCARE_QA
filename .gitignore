@@ -101,3 +101,8 @@ trace.zip
 __pycache__/
 *.pyc
 *.pyo
+
+# Playwright per-project run outputs (all variants)
+automation/playwright/artifacts*/
+automation/playwright/results*/
+automation/playwright/playwright-report*/
