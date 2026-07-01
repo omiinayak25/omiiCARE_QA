@@ -27,15 +27,15 @@
 
     <properties>
         <restassured.version>5.5.0</restassured.version>
-        <playwright.version>1.47.0</playwright.version>
-        <selenium.version>4.25.0</selenium.version>
-        <cucumber.version>7.20.1</cucumber.version>
+        <playwright.version>1.61.0</playwright.version>
+        <selenium.version>4.45.0</selenium.version>
+        <cucumber.version>7.34.4</cucumber.version>
         <junit.platform.version>1.11.2</junit.platform.version>
-        <datafaker.version>2.4.1</datafaker.version>
-        <assertj.version>3.26.3</assertj.version>
-        <awaitility.version>4.2.2</awaitility.version>
-        <testng.version>7.10.2</testng.version>
-        <allure.version>2.29.0</allure.version>
+        <datafaker.version>2.7.0</datafaker.version>
+        <assertj.version>3.27.7</assertj.version>
+        <awaitility.version>4.3.0</awaitility.version>
+        <testng.version>7.12.0</testng.version>
+        <allure.version>2.35.3</allure.version>
         <extentreports.version>5.1.2</extentreports.version>
         <!-- Suites needing a live SUT are excluded from the default build. -->
         <excluded.test.tags>api-e2e,ui-e2e,bdd</excluded.test.tags>
