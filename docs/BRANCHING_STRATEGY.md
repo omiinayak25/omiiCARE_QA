@@ -3,6 +3,16 @@
 This document defines the Git branching model, protection rules, commit
 conventions, and merge strategy for the omiiCARE_QA monorepo.
 
+> ### Simple two-branch strategy
+>
+> **Only `main` and `develop` are permanent branches.**
+>
+> - **`main`** — production-ready, stable code; every commit is releasable and is tagged for release.
+> - **`develop`** — active development; integration of completed work heading to the next release.
+>
+> All other branches — `feature/*` (and any optional `release/*` / `hotfix/*`) — are **short-lived and MUST be deleted immediately after they are merged**. No other long-lived branches are permitted. Stale and automated (e.g. Dependabot) branches are pruned regularly so that only `main` and `develop` remain.
+
+
 ## 1. Branch Model
 
 A trunk-with-release model based on two long-lived branches plus short-lived

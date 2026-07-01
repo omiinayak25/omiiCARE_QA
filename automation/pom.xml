@@ -34,11 +34,14 @@
         <datafaker.version>2.4.1</datafaker.version>
         <assertj.version>3.26.3</assertj.version>
         <awaitility.version>4.2.2</awaitility.version>
+        <testng.version>7.10.2</testng.version>
+        <allure.version>2.29.0</allure.version>
+        <extentreports.version>5.1.2</extentreports.version>
         <!-- Suites needing a live SUT are excluded from the default build. -->
         <excluded.test.tags>api-e2e,ui-e2e,bdd</excluded.test.tags>
         <!-- The Cucumber suite is excluded by class name by default (an empty,
              tag-filtered suite would otherwise error); -Pe2e re-includes it. -->
-        <excluded.test.classes>**/RunCucumberTest.java</excluded.test.classes>
+        <excluded.test.classes>**/RunCucumberTest.java, **/RunBddExpansionTest.java</excluded.test.classes>
     </properties>
 
     <dependencies>
@@ -114,6 +117,42 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- TestNG (parallel suite alongside JUnit 5) -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Allure reporting (JUnit 5, TestNG, Cucumber) -->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-junit5</artifactId>
+            <version>${allure.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-testng</artifactId>
+            <version>${allure.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-cucumber7-jvm</artifactId>
+            <version>${allure.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Extent Reports -->
+        <dependency>
+            <groupId>com.aventstack</groupId>
+            <artifactId>extentreports</artifactId>
+            <version>${extentreports.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

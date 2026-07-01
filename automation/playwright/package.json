@@ -1,0 +1,13 @@
+{
+  "name": "omiicare-qa-smoke",
+  "version": "1.0.0",
+  "private": true,
+  "description": "omiiCARE_QA headed, slow-motion smoke suite (Playwright @playwright/test) — visual verification of core flows.",
+  "scripts": {
+    "smoke": "playwright test",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
+  }
+}

@@ -205,6 +205,17 @@ Full deliverables, fences, and gates live in [ROADMAP.md](ROADMAP.md).
 | Portfolio & interview | [docs/PORTFOLIO_GUIDE.md](docs/PORTFOLIO_GUIDE.md) · [docs/INTERVIEW_GUIDE.md](docs/INTERVIEW_GUIDE.md) |
 | Versioning policy | [VERSIONING.md](VERSIONING.md) |
 
+## Branching
+
+The repository uses a **simple two-branch strategy** — only `main` and `develop` are permanent:
+
+| Branch | Purpose |
+|--------|---------|
+| `main` | Production-ready, stable code (releasable, tagged) |
+| `develop` | Active development / integration |
+
+`feature/*` branches are short-lived and **deleted immediately after merging**; no other long-lived branches are kept. Details: [docs/BRANCHING_STRATEGY.md](docs/BRANCHING_STRATEGY.md) · [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## Contributing, Security & License
 
 - **Contributing:** [CONTRIBUTING.md](CONTRIBUTING.md) · [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) · code ownership in [CODEOWNERS](CODEOWNERS).

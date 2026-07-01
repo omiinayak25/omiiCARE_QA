@@ -44,6 +44,8 @@ Two **long-lived** branches plus three short-lived prefixes:
 **Naming:** `feature/m1-security-policy`, `release/0.1.0`, `hotfix/0.1.1-readme-link`.
 Keep branches short-lived; rebase on the base branch before opening a PR.
 
+> **Only `main` and `develop` are permanent.** `feature/*` (and any `release/*` / `hotfix/*`) branches are short-lived and are **deleted immediately after merge** — no other long-lived branches remain in the repository. Stale/automated (Dependabot) branches are pruned regularly.
+
 ## 2. Conventional Commits
 
 All commit messages follow [Conventional Commits 1.0.0](https://www.conventionalcommits.org/):
