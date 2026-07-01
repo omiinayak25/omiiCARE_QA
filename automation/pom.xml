@@ -35,7 +35,7 @@
         <assertj.version>3.26.3</assertj.version>
         <awaitility.version>4.2.2</awaitility.version>
         <testng.version>7.10.2</testng.version>
-        <allure.version>2.29.0</allure.version>
+        <allure.version>2.35.3</allure.version>
         <extentreports.version>5.1.2</extentreports.version>
         <!-- Suites needing a live SUT are excluded from the default build. -->
         <excluded.test.tags>api-e2e,ui-e2e,bdd</excluded.test.tags>
