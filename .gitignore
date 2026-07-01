@@ -106,3 +106,8 @@ __pycache__/
 automation/playwright/artifacts*/
 automation/playwright/results*/
 automation/playwright/playwright-report*/
+
+# Do NOT ignore the Java source package named 'data' (automation framework Data layer);
+# the broad '**/data/' rule above is for generated data dirs only.
+!automation/src/test/java/**/data/
+!automation/src/test/java/**/data/**
