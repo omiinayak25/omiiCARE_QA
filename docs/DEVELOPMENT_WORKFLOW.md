@@ -65,6 +65,7 @@ built upon.
 - Branch from `develop`; name `feature/<module>-<short-desc>`,
   `fix/<...>`, or `docs/<...>`.
 - Keep branches short-lived and rebased on `develop`.
+- **Delete the feature branch immediately after it merges.** Only `main` (production-ready) and `develop` (active development) are permanent; the repo keeps no other long-lived branches.
 - Open a pull request into `develop`; releases promote `develop → main`.
 - `main` and `develop` are protected ([REPOSITORY_STANDARDS.md](REPOSITORY_STANDARDS.md) §8).
 

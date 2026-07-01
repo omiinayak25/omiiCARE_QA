@@ -1,0 +1,115 @@
+# =============================================================================
+# qa-ci.yml — omiiCARE_QA pull-request / push CI gate (standalone)
+# -----------------------------------------------------------------------------
+# Distinct from the existing composed ci.yml (which fans out to the
+# _reusable-*.yml units). This workflow is a self-contained, explicit pipeline
+# that builds the full Maven reactor and the React/Vite frontend in one place,
+# so contributors can read the entire green-build contract without chasing
+# reusable callees.
+#
+# Verified contract (do not drift):
+#   - Reactor modules:  apps/backend, automation, ai  (root pom.xml)
+#   - Backend builds green on the dev profile (H2).
+#   - `mvn -pl automation test` runs the 98 unit tests; SUT/browser tests are
+#     tagged ui-e2e/api-e2e/bdd and gated behind the -Pe2e profile (NOT run here).
+#   - Frontend scripts: build (tsc --noEmit && vite build), lint
+#     (eslint --max-warnings=0), typecheck (tsc --noEmit).
+#   - Toolchain: Java 21 (Temurin), Node 22, Maven 3.9.
+# =============================================================================
+---
+name: QA CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: qa-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Maven reactor — install once (skip tests) so modules resolve each other,
+  # then run unit tests for the three reactor modules. Browser/SUT e2e tests
+  # are NOT run here; they live behind -Pe2e and run in qa-nightly-e2e.yml.
+  # ---------------------------------------------------------------------------
+  reactor:
+    name: Maven reactor (build + unit tests)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - name: Build reactor (skip tests, install to local repo)
+        run: mvn -q -B -ntp -DskipTests install
+
+      - name: Unit tests (apps/backend, automation, ai)
+        run: mvn -B -ntp -pl apps/backend,automation,ai test
+
+      - name: Upload Surefire reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-ci-surefire-reports
+          path: |
+            apps/backend/target/surefire-reports/**
+            automation/target/surefire-reports/**
+            ai/target/surefire-reports/**
+          if-no-files-found: ignore
+          retention-days: 14
+
+  # ---------------------------------------------------------------------------
+  # Frontend — React + Vite. install / build / lint / typecheck, all green.
+  # ---------------------------------------------------------------------------
+  frontend:
+    name: Frontend (build / lint / typecheck)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: apps/frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: apps/frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Upload frontend dist
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-ci-frontend-dist
+          path: "apps/frontend/dist/**"
+          if-no-files-found: ignore
+          retention-days: 7

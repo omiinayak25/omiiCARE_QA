@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<!--
+  Parallel TestNG suite for the OmiiCare automation platform.
+
+  - parallel="methods"  : each @Test method runs on its own worker thread.
+  - thread-count="4"     : up to four methods execute concurrently.
+  - data-provider-thread-count : parallel @DataProvider rows also fan out to four threads.
+
+  The referenced ParallelExampleTest is fully self-validating (no SUT, browser, network, or DB),
+  so this suite is safe to run anywhere, including CI smoke stages. SUT-backed TestNG suites that
+  require a running system MUST live in their own testng.xml that is NOT wired into the default
+  build, mirroring the JUnit @Tag("ui-e2e"/"api-e2e"/"bdd") exclusion strategy.
+
+  Run with:
+    mvn -DsuiteXmlFile=src/test/resources/testng-parallel.xml test
+    or via the maven-surefire/failsafe <suiteXmlFiles> configuration.
+-->
+<suite name="OmiiCare-Parallel-Suite"
+       parallel="methods"
+       thread-count="4"
+       data-provider-thread-count="4"
+       verbose="1"
+       configfailurepolicy="continue">
+
+    <test name="Parallel-Self-Validating-Examples">
+        <classes>
+            <class name="com.omiicare.qa.automation.parallel.ParallelExampleTest"/>
+        </classes>
+    </test>
+
+</suite>

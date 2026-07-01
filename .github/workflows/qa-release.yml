@@ -1,0 +1,154 @@
+# =============================================================================
+# qa-release.yml — omiiCARE_QA tagged release (QA-report bundle)
+# -----------------------------------------------------------------------------
+# Distinct from the existing release.yml (which builds + pushes Docker images
+# to GHCR). This workflow is QA-evidence oriented: on a v* tag it builds and
+# tests the reactor + frontend, generates the Allure report, bundles QA reports
+# (Surefire + JaCoCo + Allure + Playwright), and publishes a GitHub Release
+# with those artifacts attached and notes drawn from CHANGELOG.md.
+#
+# Verified contract:
+#   - SemVer 2.0.0 tags: v* (e.g. v1.0.0).
+#   - Reactor modules: apps/backend, automation, ai.
+#   - Frontend: apps/frontend (vite build -> dist).
+#   - CHANGELOG.md uses "## [x.y.z]" section headers (matched below).
+# =============================================================================
+---
+name: QA Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing v* tag to (re)build a release bundle for"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: qa-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build, test, bundle QA reports & publish release
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve release tag
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "ref=${{ github.event.inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: apps/frontend/package-lock.json
+
+      # ----- Build + test the reactor -----
+      - name: Build reactor (skip tests, install)
+        run: mvn -q -B -ntp -DskipTests install
+
+      - name: Reactor unit tests
+        run: mvn -B -ntp -pl apps/backend,automation,ai test
+
+      - name: Package backend jar
+        run: mvn -B -ntp -pl apps/backend -am package -DskipTests
+
+      # Generate the Allure HTML report from accumulated results (advisory:
+      # absence of results must not fail the release).
+      - name: Generate Allure report
+        continue-on-error: true
+        run: mvn -B -ntp -pl automation allure:report
+
+      # ----- Build the frontend -----
+      - name: Frontend build
+        working-directory: apps/frontend
+        run: |
+          npm ci
+          npm run build
+
+      # ----- Bundle QA evidence -----
+      - name: Bundle QA reports
+        run: |
+          mkdir -p qa-release-bundle
+          # Surefire (unit test) reports across reactor modules.
+          for m in apps/backend automation ai; do
+            if [ -d "$m/target/surefire-reports" ]; then
+              mkdir -p "qa-release-bundle/surefire/$m"
+              cp -r "$m/target/surefire-reports/." "qa-release-bundle/surefire/$m/" || true
+            fi
+          done
+          # JaCoCo coverage (if produced by an earlier -Pquality run / local repo).
+          find . -type d -path '*/target/site/jacoco' -print0 2>/dev/null | while IFS= read -r -d '' d; do
+            dest="qa-release-bundle/jacoco/$(dirname "$d" | sed 's|/target/site||; s|^\./||')"
+            mkdir -p "$dest" && cp -r "$d/." "$dest/" || true
+          done
+          # Allure report.
+          if [ -d automation/target/site/allure-maven-plugin ]; then
+            mkdir -p qa-release-bundle/allure
+            cp -r automation/target/site/allure-maven-plugin/. qa-release-bundle/allure/ || true
+          fi
+          # Compress to a single attachable archive.
+          tar -czf "qa-reports-${{ steps.tag.outputs.ref }}.tar.gz" qa-release-bundle || true
+          ls -la "qa-reports-${{ steps.tag.outputs.ref }}.tar.gz" || true
+
+      - name: Extract release notes from CHANGELOG
+        id: notes
+        run: |
+          version="${{ steps.tag.outputs.ref }}"
+          version="${version#v}"
+          awk -v ver="$version" '
+            $0 ~ "^## \\[" ver "\\]" {flag=1; next}
+            flag && /^## \[/ {flag=0}
+            flag {print}
+          ' CHANGELOG.md > release-notes.md
+          if [ ! -s release-notes.md ]; then
+            echo "omiiCARE_QA ${{ steps.tag.outputs.ref }}. See CHANGELOG.md for details." > release-notes.md
+          fi
+
+      - name: Publish GitHub Release (QA report bundle)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.ref }}
+          name: omiiCARE_QA ${{ steps.tag.outputs.ref }} (QA reports)
+          body_path: release-notes.md
+          draft: false
+          prerelease: false
+          files: |
+            apps/backend/target/*.jar
+            qa-reports-${{ steps.tag.outputs.ref }}.tar.gz
+
+      - name: Upload QA report bundle as workflow artifact
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-release-reports
+          path: |
+            qa-reports-${{ steps.tag.outputs.ref }}.tar.gz
+            qa-release-bundle/**
+          if-no-files-found: ignore
+          retention-days: 30

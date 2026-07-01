@@ -84,3 +84,20 @@ desktop.ini
 logs/
 *.log
 npm-debug.log*
+
+# --- Claude Code local project settings (tooling, not project work) ---
+.claude/
+
+# --- Playwright generated run outputs (regenerable; source lives in tests*/ + *.config.ts) ---
+automation/playwright/artifacts/
+automation/playwright/artifacts-openmrs/
+automation/playwright/playwright-report-openmrs/
+automation/playwright/results/
+automation/playwright/results-openmrs/
+trace.zip
+*.webm
+
+# --- Python bytecode cache ---
+__pycache__/
+*.pyc
+*.pyo
