@@ -1,5 +1,7 @@
 # omiiCARE_QA — Project Index (Master Table of Contents)
 
+> **Start here:** [PROJECT_POLICY.md](PROJECT_POLICY.md) — standing policy: OpenMRS (o2.openmrs.org) is the permanent primary System Under Test; this repo is an enterprise QA/QE platform, not a custom app.
+
 > **The single entry point** for the omiiCARE_QA enterprise healthcare QA platform.
 > Every major asset — reverse-engineering docs, QA management, requirements, RTM,
 > manual test suite, automation framework, quality assets, AI-QE, CI/CD, and
