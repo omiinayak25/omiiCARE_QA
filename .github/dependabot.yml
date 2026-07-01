@@ -1,4 +1,7 @@
 # Dependabot — weekly dependency updates for Maven, npm, and GitHub Actions.
+# PRs target the `develop` branch (single-maintainer flow). Compatible minor/patch
+# updates are GROUPED into one PR per ecosystem to minimise branch/PR clutter;
+# major updates stay individual so breaking changes get reviewed one at a time.
 version: 2
 updates:
   # Maven reactor (root pom + modules resolved transitively).
@@ -15,6 +18,14 @@ updates:
       - backend
     commit-message:
       prefix: "build(deps)"
+    groups:
+      maven-minor-and-patch:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
 
   # Frontend npm dependencies.
   - package-ecosystem: npm
@@ -30,6 +41,14 @@ updates:
       - frontend
     commit-message:
       prefix: "build(deps)"
+    groups:
+      npm-minor-and-patch:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
 
   # GitHub Actions used by the workflows.
   - package-ecosystem: github-actions
@@ -45,3 +64,11 @@ updates:
       - ci
     commit-message:
       prefix: "ci(deps)"
+    groups:
+      github-actions-minor-and-patch:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
