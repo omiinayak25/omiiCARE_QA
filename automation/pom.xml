@@ -29,7 +29,7 @@
         <restassured.version>5.5.0</restassured.version>
         <playwright.version>1.47.0</playwright.version>
         <selenium.version>4.25.0</selenium.version>
-        <cucumber.version>7.20.1</cucumber.version>
+        <cucumber.version>7.34.4</cucumber.version>
         <junit.platform.version>1.11.2</junit.platform.version>
         <datafaker.version>2.4.1</datafaker.version>
         <assertj.version>3.26.3</assertj.version>
