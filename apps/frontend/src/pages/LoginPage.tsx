@@ -62,14 +62,14 @@ export function LoginPage() {
               <TextField
                 label={t('login.username')}
                 autoComplete="username"
-                inputProps={{ 'data-testid': 'login-username' }}
+                slotProps={{ htmlInput: { 'data-testid': 'login-username' } }}
                 {...register('username', { required: true })}
               />
               <TextField
                 label={t('login.password')}
                 type="password"
                 autoComplete="current-password"
-                inputProps={{ 'data-testid': 'login-password' }}
+                slotProps={{ htmlInput: { 'data-testid': 'login-password' } }}
                 {...register('password', { required: true })}
               />
               <Button

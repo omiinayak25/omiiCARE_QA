@@ -86,7 +86,7 @@ export function AppointmentsPage() {
 
   return (
     <Box data-testid="appointments-page">
-      <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+      <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
         <Typography variant="h1">{t('appointments.title')}</Typography>
         <Button variant="contained" onClick={() => setDialogOpen(true)} data-testid="book-appointment">
           {t('appointments.book')}
@@ -153,16 +153,14 @@ export function AppointmentsPage() {
                 label={t('appointments.start')}
                 type="datetime-local"
                 required
-                InputLabelProps={{ shrink: true }}
-                inputProps={{ 'data-testid': 'appointment-start' }}
+                slotProps={{ inputLabel: { shrink: true }, htmlInput: { 'data-testid': 'appointment-start' } }}
                 {...register('scheduledStart', { required: true })}
               />
               <TextField
                 label={t('appointments.end')}
                 type="datetime-local"
                 required
-                InputLabelProps={{ shrink: true }}
-                inputProps={{ 'data-testid': 'appointment-end' }}
+                slotProps={{ inputLabel: { shrink: true }, htmlInput: { 'data-testid': 'appointment-end' } }}
                 {...register('scheduledEnd', { required: true })}
               />
               <TextField label={t('appointments.reason')} {...register('reason')} />
