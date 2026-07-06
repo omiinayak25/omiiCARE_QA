@@ -59,7 +59,7 @@ export function PatientsPage() {
 
   return (
     <Box data-testid="patients-page">
-      <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+      <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
         <Typography variant="h1">{t('patients.title')}</Typography>
         <Button variant="contained" onClick={() => setDialogOpen(true)} data-testid="add-patient">
           {t('patients.add')}
@@ -76,7 +76,7 @@ export function PatientsPage() {
           setSearch(event.target.value);
         }}
         sx={{ mb: 2 }}
-        inputProps={{ 'data-testid': 'patient-search' }}
+        slotProps={{ htmlInput: { 'data-testid': 'patient-search' } }}
       />
 
       {patientsQuery.isError && <Alert severity="error">{t('common.error')}</Alert>}
@@ -116,7 +116,7 @@ export function PatientsPage() {
       </TableContainer>
 
       {data && data.totalPages > 1 && (
-        <Stack alignItems="center" sx={{ mt: 2 }}>
+        <Stack sx={{ alignItems: 'center', mt: 2 }}>
           <Pagination
             count={data.totalPages}
             page={data.page + 1}
@@ -134,21 +134,20 @@ export function PatientsPage() {
               <TextField
                 label={t('patients.form.firstName')}
                 required
-                inputProps={{ 'data-testid': 'patient-firstName' }}
+                slotProps={{ htmlInput: { 'data-testid': 'patient-firstName' } }}
                 {...register('firstName', { required: true })}
               />
               <TextField
                 label={t('patients.form.lastName')}
                 required
-                inputProps={{ 'data-testid': 'patient-lastName' }}
+                slotProps={{ htmlInput: { 'data-testid': 'patient-lastName' } }}
                 {...register('lastName', { required: true })}
               />
               <TextField
                 label={t('patients.form.dateOfBirth')}
                 type="date"
                 required
-                InputLabelProps={{ shrink: true }}
-                inputProps={{ 'data-testid': 'patient-dob' }}
+                slotProps={{ inputLabel: { shrink: true }, htmlInput: { 'data-testid': 'patient-dob' } }}
                 {...register('dateOfBirth', { required: true })}
               />
               <TextField

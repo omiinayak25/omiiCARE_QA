@@ -44,7 +44,7 @@ export function DashboardPage() {
       <Typography variant="h2" sx={{ mt: 3, mb: 1 }}>
         {t('dashboard.roles')}
       </Typography>
-      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+      <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: 'wrap' }}>
         {(user?.authorities ?? []).map((authority) => (
           <Chip key={authority} label={authority} size="small" />
         ))}

@@ -46,18 +46,18 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Dependency versions (managed centrally) -->
-        <mapstruct.version>1.6.2</mapstruct.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
         <springdoc.version>2.6.0</springdoc.version>
-        <jjwt.version>0.12.6</jjwt.version>
+        <jjwt.version>0.13.0</jjwt.version>
         <testcontainers.version>1.20.2</testcontainers.version>
-        <opentelemetry.version>1.42.1</opentelemetry.version>
+        <opentelemetry.version>1.63.0</opentelemetry.version>
 
         <!-- Code-quality plugin versions -->
         <spotless.version>2.43.0</spotless.version>
-        <checkstyle.plugin.version>3.5.0</checkstyle.plugin.version>
-        <pmd.plugin.version>3.25.0</pmd.plugin.version>
-        <spotbugs.plugin.version>4.8.6.4</spotbugs.plugin.version>
-        <jacoco.version>0.8.12</jacoco.version>
+        <checkstyle.plugin.version>3.6.0</checkstyle.plugin.version>
+        <pmd.plugin.version>3.28.0</pmd.plugin.version>
+        <spotbugs.plugin.version>4.10.2.0</spotbugs.plugin.version>
+        <jacoco.version>0.8.15</jacoco.version>
 
         <!-- Coverage gate (raised as the codebase matures) -->
         <jacoco.line.coverage>0.00</jacoco.line.coverage>
